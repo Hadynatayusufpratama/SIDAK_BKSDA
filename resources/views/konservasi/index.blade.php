@@ -125,6 +125,7 @@
             </div>
         @endif
 
+        @if($selectedSub)
         <!-- RINGKASAN STAT CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between">
@@ -168,6 +169,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <!-- CARD FILTER BERTINGKAT (BIDANG -> SUB-BIDANG) -->
         <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80">
@@ -179,13 +181,13 @@
                     <h3 class="text-sm font-bold text-slate-900">Pilih Kategori Data Konservasi</h3>
                 </div>
                 @if(request('bidang') || request('sub_bidang') || request('search'))
-                    <a href="{{ route('konservasi.index') }}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 flex items-center gap-1">
+                    <a href="{{ route('rekap.index') }}" class="text-xs font-semibold text-rose-600 hover:text-rose-800 flex items-center gap-1">
                         <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filter
                     </a>
                 @endif
             </div>
 
-            <form action="{{ route('konservasi.index') }}" method="GET" id="filterForm">
+            <form action="{{ route('rekap.index') }}" method="GET" id="filterForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     
                     <!-- 1. Dropdown Bidang Utama -->
@@ -206,11 +208,11 @@
                     <!-- 2. Dropdown Sub-Bidang -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">2. Sub-Bidang / Kategori</label>
-                        <select name="sub_bidang" id="subBidangSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white transition shadow-xs" {{ !request('bidang') ? 'disabled' : '' }}>
+                        <select name="sub_bidang" id="subBidangSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white transition shadow-xs" {{ !$selectedBidang ? 'disabled' : '' }}>
                             <option value="">-- Pilih Sub-Bidang --</option>
-                            @if(request('bidang') && isset($masterBidang[request('bidang')]))
-                                @foreach($masterBidang[request('bidang')]['subs'] as $subKode => $subNama)
-                                    <option value="{{ $subKode }}" {{ request('sub_bidang') == $subKode ? 'selected' : '' }}>
+                            @if($selectedBidang && isset($masterBidang[$selectedBidang]))
+                                @foreach($masterBidang[$selectedBidang]['subs'] as $subKode => $subNama)
+                                    <option value="{{ $subKode }}" {{ $selectedSub == $subKode ? 'selected' : '' }}>
                                         {{ $subNama }}
                                     </option>
                                 @endforeach
@@ -229,19 +231,20 @@
             </form>
         </div>
 
-        <!-- TABEL REKAPITULASI DATA -->
+        @if($selectedSub)
+        <!-- DATA SUB-BIDANG TERPILIH -->
         <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
             
             <!-- Header Judul, Form Cari, & Tombol Unduh -->
             <div class="p-6 border-b border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Riwayat Data Konservasi</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Daftar entri data kinerja dan kegiatan BKSDA Sulawesi Tengah</p>
+                    <h3 class="text-lg font-bold text-slate-900">Data {{ $masterBidang[$selectedBidang]['subs'][$selectedSub] ?? $selectedSub }}</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Data untuk sub-bidang yang dipilih</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center gap-3">
                     <!-- Form Pencarian Teks -->
-                    <form action="{{ route('konservasi.index') }}" method="GET" class="flex items-center gap-2 w-full sm:w-auto">
+                    <form action="{{ route('rekap.index') }}" method="GET" class="flex items-center gap-2 w-full sm:w-auto">
                         @if(request('bidang')) <input type="hidden" name="bidang" value="{{ request('bidang') }}"> @endif
                         @if(request('sub_bidang')) <input type="hidden" name="sub_bidang" value="{{ request('sub_bidang') }}"> @endif
                         
@@ -261,17 +264,19 @@
                     </form>
 
                     <!-- Tombol Unduh PDF & Excel -->
+                    @if($selectedSub)
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <a href="{{ route('konservasi.export.pdf', request()->query()) }}" 
+                        <a href="{{ route('konservasi.export.pdf', ['bidang' => $selectedBidang, 'sub_bidang' => $selectedSub]) }}"
                            class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition shadow-xs whitespace-nowrap">
                             <i class="fa-solid fa-file-pdf mr-1.5 text-sm"></i> Unduh PDF
                         </a>
 
-                        <a href="{{ route('konservasi.export.excel', request()->query()) }}" 
+                        <a href="{{ route('konservasi.export.excel', ['bidang' => $selectedBidang, 'sub_bidang' => $selectedSub]) }}"
                            class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition shadow-xs whitespace-nowrap">
                             <i class="fa-solid fa-file-excel mr-1.5 text-sm"></i> Unduh Excel
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
 
@@ -803,6 +808,113 @@
                             @endforelse
                         </tbody>
                     </table>
+                @elseif($selectedBidang === 'konservasi_kawasan' && $selectedSub === 'B.02')
+                    <table class="min-w-[2800px] w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-extrabold uppercase text-slate-500">
+                                <th class="py-3 px-4">No</th>
+                                <th class="py-3 px-4">Tahun</th>
+                                <th class="py-3 px-4">Kawasan Konservasi</th>
+                                <th class="py-3 px-4">Ada Pemberian Akses</th>
+                                <th class="py-3 px-4">Jenis Pengelolaan Bersama</th>
+                                <th class="py-3 px-4">Jenis Akses</th>
+                                <th class="py-3 px-4">Jenis yang Dimanfaatkan</th>
+                                <th class="py-3 px-4">Nama Kelompok</th>
+                                <th class="py-3 px-4">Masyarakat Hukum Adat</th>
+                                <th class="py-3 px-4">Laki-laki</th>
+                                <th class="py-3 px-4">Perempuan</th>
+                                <th class="py-3 px-4">Kabupaten/Kota</th>
+                                <th class="py-3 px-4">Kecamatan</th>
+                                <th class="py-3 px-4">Kelurahan/Desa</th>
+                                <th class="py-3 px-4">Nomor Surat Dirjen KSDAE</th>
+                                <th class="py-3 px-4">Nomor Perjanjian Kerjasama</th>
+                                <th class="py-3 px-4">Tanggal Mulai KS</th>
+                                <th class="py-3 px-4">Tanggal Berakhir PKS</th>
+                                <th class="py-3 px-4">Luas Area Pemanfaatan (Ha)</th>
+                                <th class="py-3 px-4">Zona/Blok</th>
+                                <th class="py-3 px-4">Dokumen Kerjasama (PDF)</th>
+                                <th class="py-3 px-4">Shapefile Area (ZIP)</th>
+                                <th class="py-3 px-4 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                            @forelse($data as $index => $item)
+                                @php
+                                    $detailFields = [];
+                                    foreach (explode(' | ', (string) $item->keterangan) as $detailLine) {
+                                        if (str_contains($detailLine, ': ')) {
+                                            [$detailLabel, $detailValue] = explode(': ', $detailLine, 2);
+                                            $detailFields[strtolower(trim($detailLabel))] = trim($detailValue);
+                                        }
+                                    }
+
+                                    $hasAccess = match (strtolower($detailFields['ada pemberian akses pemanfaatan tradisional dan kemitraan konservasi'] ?? '')) {
+                                        'ya' => 'Ya, ada',
+                                        'tidak' => 'Tidak ada (Nihil)',
+                                        default => '-',
+                                    };
+                                    $managementType = match ($detailFields['jenis pengelolaan bersama masyarakat'] ?? '') {
+                                        'akses_tradisional' => 'Pemberian Akses Pemanfaatan Tradisional',
+                                        'kemitraan_konservasi' => 'Kemitraan Konservasi',
+                                        default => '-',
+                                    };
+                                    $accessType = match ($detailFields['jenis akses'] ?? '') {
+                                        'pemungutan_hhbk' => 'Pemungutan HHBK',
+                                        'budidaya_tradisional' => 'Budidaya Tradisional',
+                                        'perburuan_tradisional' => 'Perburuan Tradisional',
+                                        'pemanfaatan_sda_perairan' => 'Pemanfaatan SDA Perairan',
+                                        'lainnya' => 'Lainnya',
+                                        default => $detailFields['jenis akses'] ?? '-',
+                                    };
+                                @endphp
+                                <tr class="align-top hover:bg-slate-50/80 transition-colors">
+                                    <td class="py-4 px-4 font-bold text-slate-400">{{ method_exists($data, 'firstItem') ? $data->firstItem() + $index : $index + 1 }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ $item->tahun }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['kawasan konservasi'] ?? '-' }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ $hasAccess }}</td>
+                                    <td class="py-4 px-4">{{ $managementType }}</td>
+                                    <td class="py-4 px-4">{{ $accessType }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['jenis yang dimanfaatkan'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['nama kelompok'] ?? '-' }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ $detailFields['masyarakat hukum adat'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['laki-laki'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['perempuan'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['kabupaten/kota'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['kecamatan'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['kelurahan/desa'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['nomor surat dirjen ksdae'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['nomor perjanjian kerjasama'] ?? '-' }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ $detailFields['tanggal mulai ks'] ?? '-' }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ $detailFields['tanggal berakhir pks'] ?? '-' }}</td>
+                                    <td class="py-4 px-4 whitespace-nowrap">{{ isset($detailFields['luas area pemanfaatan']) ? $detailFields['luas area pemanfaatan'] . ' Ha' : '-' }}</td>
+                                    <td class="py-4 px-4">{{ $detailFields['zona/blok'] ?? '-' }}</td>
+                                    <td class="py-4 px-4">
+                                        @if(!empty($detailFields['dokumen kerjasama b02']))
+                                            <a href="{{ asset('storage/' . $detailFields['dokumen kerjasama b02']) }}" target="_blank" class="font-semibold text-emerald-700 hover:underline">Lihat dokumen</a>
+                                        @else - @endif
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        @if(!empty($detailFields['shapefile kerjasama b02']))
+                                            <a href="{{ asset('storage/' . $detailFields['shapefile kerjasama b02']) }}" target="_blank" class="font-semibold text-emerald-700 hover:underline">Lihat shapefile</a>
+                                        @else - @endif
+                                    </td>
+                                    <td class="py-4 px-4 text-center whitespace-nowrap">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button type="button" @click="openModal = true; modalTitle = '{{ addslashes($item->subBidang->nama_sub_bidang ?? 'Detail Data') }}'; modalContent = '{{ addslashes($item->keterangan ?? 'Tidak ada rincian') }}'" class="w-8 h-8 flex items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition border border-blue-200/80 shadow-xs" title="Lihat Detail Lengkap"><i class="fa-solid fa-eye text-xs"></i></button>
+                                            <a href="{{ route('konservasi.edit', $item->id) }}" class="w-8 h-8 flex items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-xl transition border border-amber-200/80 shadow-xs" title="Edit Data"><i class="fa-solid fa-pen-to-square text-xs"></i></a>
+                                            <form action="{{ route('konservasi.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-8 h-8 flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition border border-rose-200/80 shadow-xs" title="Hapus Data"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="23" class="py-12 px-5 text-center text-xs font-bold text-slate-500">Belum ada data B.02 untuk filter ini.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 @else
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -932,6 +1044,7 @@
             </div>
             @endif
         </div>
+        @endif
 
     </main>
 
@@ -978,11 +1091,6 @@
             </div>
         </div>
     </div>
-
-    <!-- FOOTER -->
-    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
-    </footer>
 
     <!-- SCRIPT DYNAMIC SUB-BIDANG DROPDOWN -->
     <script>

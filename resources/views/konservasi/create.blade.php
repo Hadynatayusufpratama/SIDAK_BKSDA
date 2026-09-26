@@ -135,6 +135,17 @@
             </div>
         @endif
 
+        @if ($errors->any())
+            <div role="alert" class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl shadow-sm">
+                <p class="text-xs font-bold">Data belum tersimpan. Periksa kembali isian berikut:</p>
+                <ul class="mt-2 list-disc list-inside text-xs space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- CARD CONTAINER FORM -->
         <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm"
              x-data="{ 
@@ -148,6 +159,7 @@
                  ketersediaanEkosistem: 'ya',
                  ketersediaanZonasi: 'sudah',
                  adaKegiatanB01: 'ya',
+                 adaAksesB02: 'ya',
                  palBaik: 0,
                  palRusak: 0,
                  palHilang: 0,
@@ -1179,10 +1191,179 @@
 
                 </div>
 
-                <!-- KETERANGAN GLOBAL -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label>
-                    <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white text-xs font-medium shadow-xs"></textarea>
+                <!-- ========================================================================= -->
+                <!-- FORM DINAMIS SUB-BIDANG B.02: Akses Tradisional & Kemitraan                -->
+                <!-- ========================================================================= -->
+                <div x-show="selectedSubBidangKode === 'B.02'" x-transition class="space-y-6 pt-2">
+                    <fieldset :disabled="selectedSubBidangKode !== 'B.02'" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_b02" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kawasan Konservasi: <span class="text-rose-500">*</span></label>
+                            <select name="kawasan_nama_b02" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">-- Pilih Kawasan Konservasi --</option>
+                                @foreach ($kawasanList as $kawasan)
+                                    <option value="{{ $kawasan }}">{{ $kawasan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-50/80 border border-slate-200 rounded-xl">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700">Ada Pemberian Akses Pemanfaatan Tradisional dan Kemitraan Konservasi di kawasan tersebut?</label>
+                            <p class="text-[11px] text-slate-500 mt-1">Pilih tidak jika tidak ada/nihil.</p>
+                        </div>
+                        <div class="flex items-center gap-6 shrink-0">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                <input type="radio" name="ada_akses_b02" value="ya" x-model="adaAksesB02" class="text-forest-600 focus:ring-forest-600">
+                                Ya, ada
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                <input type="radio" name="ada_akses_b02" value="tidak" x-model="adaAksesB02" class="text-forest-600 focus:ring-forest-600">
+                                Tidak ada (Nihil)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div x-show="adaAksesB02 === 'ya'" x-transition class="space-y-6">
+                        <fieldset :disabled="adaAksesB02 !== 'ya'" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">Jenis Pengelolaan Bersama Masyarakat: <span class="text-rose-500">*</span></label>
+                                <div class="flex flex-wrap gap-x-6 gap-y-3">
+                                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                        <input type="radio" name="jenis_pengelolaan_b02" value="akses_tradisional" required class="text-forest-600 focus:ring-forest-600">
+                                        Pemberian Akses Pemanfaatan Tradisional
+                                    </label>
+                                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                        <input type="radio" name="jenis_pengelolaan_b02" value="kemitraan_konservasi" class="text-forest-600 focus:ring-forest-600">
+                                        Kemitraan Konservasi
+                                    </label>
+                                </div>
+                            </div>
+
+                            <fieldset class="p-5 bg-white border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">PEMBERIAN AKSES PEMANFAATAN TRADISIONAL</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">Jenis Akses: <span class="text-rose-500">*</span></label>
+                                        <div class="space-y-2">
+                                            @foreach([
+                                                'pemungutan_hhbk' => 'Pemungutan HHBK',
+                                                'budidaya_tradisional' => 'Budidaya Tradisional',
+                                                'perburuan_tradisional' => 'Perburuan Tradisional',
+                                                'pemanfaatan_sda_perairan' => 'Pemanfaatan SDA Perairan',
+                                                'lainnya' => 'Lainnya',
+                                            ] as $jenisAksesValue => $jenisAksesLabel)
+                                                <label class="flex items-center gap-2 text-xs text-slate-700">
+                                                    <input type="radio" name="jenis_akses_b02" value="{{ $jenisAksesValue }}" required class="text-forest-600 focus:ring-forest-600">
+                                                    {{ $jenisAksesLabel }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Jenis yang dimanfaatkan: <span class="text-rose-500">*</span></label>
+                                        <textarea name="jenis_dimanfaatkan_b02" rows="5" required placeholder="Masukan jenis yang dimanfaatkan..." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">INFORMASI KELOMPOK MASYARAKAT</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Kelompok: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nama_kelompok_b02" required placeholder="Nama kelompok" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">Masyarakat Hukum Adat?: <span class="text-rose-500">*</span></label>
+                                        <div class="flex gap-6 py-2">
+                                            <label class="inline-flex items-center gap-2 text-xs text-slate-700"><input type="radio" name="masyarakat_hukum_adat_b02" value="ya" required class="text-forest-600"> Ya</label>
+                                            <label class="inline-flex items-center gap-2 text-xs text-slate-700"><input type="radio" name="masyarakat_hukum_adat_b02" value="tidak" class="text-forest-600"> Tidak/Bukan</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Laki-laki: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" name="jumlah_laki_b02" min="0" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Orang</span></div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Perempuan: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" name="jumlah_perempuan_b02" min="0" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Orang</span></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kabupaten/Kota: <span class="text-rose-500">*</span></label>
+                                        <select id="kabupaten_b02_select" name="kabupaten_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kabupaten/kota</option></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kecamatan: <span class="text-rose-500">*</span></label>
+                                        <select id="kecamatan_b02_select" name="kecamatan_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kecamatan</option></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kelurahan/Desa: <span class="text-rose-500">*</span></label>
+                                        <select id="desa_b02_select" name="desa_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kelurahan/desa</option></select>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="provinsi_b02" name="provinsi_b02" value="Sulawesi Tengah">
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">INFORMASI PERJANJIAN KERJASAMA</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Surat Dirjen KSDAE: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nomor_surat_dirjen_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Perjanjian Kerjasama: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nomor_pks_b02" required placeholder="Nomor surat" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Mulai KS: <span class="text-rose-500">*</span></label>
+                                        <input type="date" name="tanggal_mulai_ks_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir PKS: <span class="text-rose-500">*</span></label>
+                                        <input type="date" name="tanggal_akhir_pks_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Luas Area Pemanfaatan: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" step="0.01" min="0" name="luas_area_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Ha</span></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Zona/Blok: <span class="text-rose-500">*</span></label>
+                                    <input type="text" name="zona_blok_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Kerjasama (PDF)</label>
+                                    <p class="text-[11px] text-slate-500 mb-2">Format PDF, maksimal 2 MB.</p>
+                                    <input type="file" name="dokumen_kerjasama_b02" accept=".pdf,application/pdf" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-3">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">LOKASI GEOGRAFIS PERJANJIAN KERJASAMA</legend>
+                                <p class="text-xs text-slate-600">Data area lokasi pemberian akses dan kemitraan konservasi tersedia dalam bentuk polygon?</p>
+                                <label class="block text-xs font-bold text-slate-700">Unggah Polygon Area (Shapefile ZIP)</label>
+                                <p class="text-[11px] text-slate-500">Shapefile berisi .shp, .dbf, .prj, .shx, dan .cpg dalam satu file ZIP; maksimal 10 MB.</p>
+                                <input type="file" name="shapefile_kerjasama_b02" accept=".zip,application/zip" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                            </fieldset>
+                        </fieldset>
+                    </div>
+                    </fieldset>
                 </div>
 
                 <!-- Action Button -->
@@ -1197,14 +1378,11 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
-    </footer>
-
     <!-- Script AJAX Sub-Bidang & Wilayah Indonesia -->
     <script>
         // --- 1. SCRIPT FOR SUB-BIDANG ---
+        const subBidangUrlTemplate = @json(route('konservasi.sub-bidang', ['bidang_id' => '__BIDANG_ID__']), JSON_UNESCAPED_SLASHES);
+
         document.getElementById('bidang_select').addEventListener('change', function() {
             let bidangId = this.value;
             let subSelect = document.getElementById('sub_bidang_select');
@@ -1218,7 +1396,8 @@
             subSelect.disabled = true;
 
             if (bidangId) {
-                fetch('/get-sub-bidang/' + bidangId)
+                const subBidangUrl = subBidangUrlTemplate.replace('__BIDANG_ID__', encodeURIComponent(bidangId));
+                fetch(subBidangUrl)
                     .then(response => response.json())
                     .then(data => {
                         subSelect.innerHTML = '<option value="">-- Pilih Sub-Bidang Kategori --</option>';
@@ -1333,6 +1512,58 @@
                             });
                             desaSelect.disabled = false;
                         });
+                }
+            });
+        }
+
+        const kabupatenB02 = document.getElementById('kabupaten_b02_select');
+        const kecamatanB02 = document.getElementById('kecamatan_b02_select');
+        const desaB02 = document.getElementById('desa_b02_select');
+        const wilayahApi = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+        function setWilayahOptions(select, placeholder, entries) {
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            entries.forEach(entry => {
+                const option = document.createElement('option');
+                option.value = entry.name;
+                option.textContent = entry.name;
+                option.dataset.id = entry.id ?? '';
+                select.appendChild(option);
+            });
+            select.disabled = false;
+        }
+
+        if (kabupatenB02 && kecamatanB02 && desaB02) {
+            fetch(`${wilayahApi}/regencies/72.json`)
+                .then(response => response.json())
+                .then(regencies => setWilayahOptions(kabupatenB02, 'Pilih kabupaten/kota', regencies))
+                .catch(() => {
+                    kabupatenB02.innerHTML = '<option value="">Gagal memuat kabupaten/kota</option>';
+                });
+
+            kabupatenB02.addEventListener('change', function() {
+                const regencyId = this.options[this.selectedIndex]?.dataset.id;
+                kecamatanB02.disabled = true;
+                desaB02.disabled = true;
+                kecamatanB02.innerHTML = '<option value="">Pilih kecamatan</option>';
+                desaB02.innerHTML = '<option value="">Pilih kelurahan/desa</option>';
+
+                if (regencyId) {
+                    fetch(`${wilayahApi}/districts/${regencyId}.json`)
+                        .then(response => response.json())
+                        .then(districts => setWilayahOptions(kecamatanB02, 'Pilih kecamatan', districts));
+                }
+            });
+
+            kecamatanB02.addEventListener('change', function() {
+                const districtId = this.options[this.selectedIndex]?.dataset.id;
+                desaB02.disabled = true;
+                desaB02.innerHTML = '<option value="">Pilih kelurahan/desa</option>';
+
+                if (districtId) {
+                    fetch(`${wilayahApi}/villages/${districtId}.json`)
+                        .then(response => response.json())
+                        .then(villages => setWilayahOptions(desaB02, 'Pilih kelurahan/desa', villages));
                 }
             });
         }
