@@ -25,7 +25,7 @@
                 <a href="{{ route('konservasi.dashboard') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Dashboard</a>
                 <a href="{{ route('konservasi.index') }}" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-emerald-700 shadow-xs">Rekapitulasi</a>
                 <a href="{{ route('konservasi.create') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Tambah Data</a>
-                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Peta GIS</a>
+                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">GIS</a>
             </nav>
             <div class="flex items-center gap-2.5 border-l pl-4 border-slate-200">
                 <div class="w-9 h-9 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs shadow-sm uppercase">
@@ -117,13 +117,24 @@
                                 'ketersediaan_ekosistem' => ['ya' => 'Ya, tersedia', 'tidak' => 'Tidak'],
                                 'ketersediaan_zonasi' => ['sudah' => 'Sudah', 'belum' => 'Belum'],
                                 'ada_kegiatan_b01' => ['ya' => 'Ada kegiatan', 'tidak' => 'Tidak ada'],
+                                'ada_akses_b02' => ['ya' => 'Ya, ada', 'tidak' => 'Tidak ada (Nihil)'],
+                                'jenis_pengelolaan_b02' => ['akses_tradisional' => 'Pemberian Akses Pemanfaatan Tradisional', 'kemitraan_konservasi' => 'Kemitraan Konservasi'],
+                                'jenis_akses_b02' => ['pemungutan_hhbk' => 'Pemungutan HHBK', 'budidaya_tradisional' => 'Budidaya Tradisional', 'perburuan_tradisional' => 'Perburuan Tradisional', 'pemanfaatan_sda_perairan' => 'Pemanfaatan SDA Perairan', 'lainnya' => 'Lainnya'],
+                                'masyarakat_hukum_adat_b02' => ['ya' => 'Ya', 'tidak' => 'Tidak/Bukan'],
                                 'sumber_dana' => ['APBN KLHK Lainnya' => 'APBN KLHK Lainnya', 'APBN KSDAE' => 'APBN KSDAE', 'Pendanaan Pihak Lainnya' => 'Pendanaan Pihak Lainnya', 'Pendanaan Gabungan' => 'Pendanaan Gabungan'],
                             ];
+<<<<<<< HEAD
                             $editDateFields = ['sk_parsial_tanggal', 'sk_provinsi_tanggal', 'sk_penetapan_tanggal', 'sk_rpjp_tanggal_pengesahan', 'sk_rpjp_periode_berakhir', 'tanggal_batb', 'tanggal_pelaksanaan_evaluasi', 'tanggal_sk_zonasi'];
                             $editNumberFields = ['sk_parsial_luas', 'sk_provinsi_luas', 'sk_penetapan_luas', 'pal_baik', 'pal_rusak', 'pal_hilang', 'pal_total', 'panjang_pal_km', 'jumlah_laki', 'jumlah_perempuan', 'jumlah_bantuan'];
                             $editTextareaFields = ['rekomendasi_evaluasi', 'tindak_lanjut_evaluasi'];
                             $editFileFields = ['sk_parsial_file', 'sk_provinsi_file', 'sk_penetapan_file', 'shapefile_zip', 'sk_rpjp_file', 'dokumen_batb', 'shapefile_monitoring_zip', 'file_dokumen_evaluasi', 'shapefile_ekosistem_zip', 'file_sk_zonasi', 'shapefile_zonasi_zip', 'dokumen_d03', 'shapefile_d03', 'foto_odtwa', 'dokumen_perizinan_pbp_d06', 'shapefile_pbp_d06', 'foto_sarana_prasarana_d07', 'shapefile_d10', 'dokumen_sk_d11', 'shapefile_d11', 'dokumen_perizinan_d14', 'shapefile_d14', 'dokumen_perizinan_c02', 'dokumen_perizinan_c04', 'dokumen_perizinan_c06'];
                             $editImageFields = ['foto_odtwa', 'foto_sarana_prasarana_d07'];
+=======
+                            $editDateFields = ['sk_parsial_tanggal', 'sk_provinsi_tanggal', 'sk_penetapan_tanggal', 'sk_rpjp_tanggal_pengesahan', 'sk_rpjp_periode_berakhir', 'tanggal_batb', 'tanggal_pelaksanaan_evaluasi', 'tanggal_sk_zonasi', 'tanggal_mulai_ks_b02', 'tanggal_akhir_pks_b02'];
+                            $editNumberFields = ['sk_parsial_luas', 'sk_provinsi_luas', 'sk_penetapan_luas', 'pal_baik', 'pal_rusak', 'pal_hilang', 'pal_total', 'panjang_pal_km', 'jumlah_laki', 'jumlah_perempuan', 'jumlah_bantuan', 'jumlah_laki_b02', 'jumlah_perempuan_b02', 'luas_area_b02'];
+                            $editTextareaFields = ['rekomendasi_evaluasi', 'tindak_lanjut_evaluasi', 'jenis_dimanfaatkan_b02'];
+                            $editFileFields = ['sk_parsial_file', 'sk_provinsi_file', 'sk_penetapan_file', 'shapefile_zip', 'sk_rpjp_file', 'dokumen_batb', 'shapefile_monitoring_zip', 'file_dokumen_evaluasi', 'shapefile_ekosistem_zip', 'file_sk_zonasi', 'shapefile_zonasi_zip', 'dokumen_kerjasama_b02', 'shapefile_kerjasama_b02'];
+>>>>>>> 23d71526497aa8bc1353a93efea120528a1f5a59
                             $editCheckboxFields = ['hhbk_nihil', 'pertanian_nihil', 'perkebunan_nihil', 'peternakan_nihil', 'perikanan_nihil', 'wisata_nihil', 'produk_nihil', 'pembibitan_nihil', 'lainnya_nihil'];
                         @endphp
 
@@ -164,38 +175,13 @@
                                                 @elseif(in_array($name, $editTextareaFields, true))
                                                     <textarea name="{{ $name }}" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition text-slate-800">{{ $value }}</textarea>
                                                 @else
-                                                    <input type="{{ in_array($name, $editDateFields, true) ? 'date' : (in_array($name, $editNumberFields, true) || str_starts_with($name, 'tahun') ? 'number' : 'text') }}" name="{{ $name }}" value="{{ $value }}" {{ in_array($name, ['sk_parsial_luas', 'sk_provinsi_luas', 'sk_penetapan_luas', 'panjang_pal_km'], true) ? 'step=0.01' : '' }} class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition font-medium text-slate-800">
+                                                    <input type="{{ in_array($name, $editDateFields, true) ? 'date' : (in_array($name, $editNumberFields, true) || str_starts_with($name, 'tahun') ? 'number' : 'text') }}" name="{{ $name }}" value="{{ $value }}" {{ in_array($name, ['sk_parsial_luas', 'sk_provinsi_luas', 'sk_penetapan_luas', 'panjang_pal_km', 'luas_area_b02'], true) ? 'step=0.01' : '' }} class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition font-medium text-slate-800">
                                                 @endif
                                             </div>
                                         @endforeach
                                     </div>
                                 </section>
                             @endforeach
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/80">
-                                <span class="w-7 h-7 rounded-lg bg-emerald-700 text-amber-400 flex items-center justify-center text-xs font-black">3</span>
-                                <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Waktu & Koordinat Spasial</h3>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Bulan</label>
-                                    <input type="text" name="bulan" value="{{ old('bulan', $item->bulan) }}" placeholder="Opsional" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Latitude (LS/LU)</label>
-                                    <input type="text" name="latitude" value="{{ old('latitude', $item->latitude) }}" placeholder="-0.897123" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Longitude (BT)</label>
-                                    <input type="text" name="longitude" value="{{ old('longitude', $item->longitude) }}" placeholder="119.87123" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
-                                </div>
-                                <div class="sm:col-span-2 md:col-span-1">
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan Tambahan</label>
-                                    <input type="text" name="keterangan" value="{{ old('keterangan', $detailValues['keterangan'] ?? '') }}" placeholder="Opsional" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Submit Buttons -->

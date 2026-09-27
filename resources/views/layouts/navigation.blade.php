@@ -60,7 +60,7 @@
 
                     @if(Route::has('konservasi.peta'))
                     <x-nav-link :href="route('konservasi.peta')" :active="request()->routeIs('konservasi.peta')" class="text-xs font-bold transition">
-                        <i class="fas fa-map-location-dot mr-2 text-emerald-600"></i> {{ __('Peta GIS') }}
+                        <i class="fas fa-map-location-dot mr-2 text-emerald-600"></i> {{ __('GIS') }}
                     </x-nav-link>
                     @endif
                 </div>
@@ -157,7 +157,7 @@
 
             @if(Route::has('konservasi.peta'))
             <x-responsive-nav-link :href="route('konservasi.peta')" :active="request()->routeIs('konservasi.peta')" class="rounded-xl">
-                <i class="fas fa-map-location-dot mr-2 text-emerald-600"></i> {{ __('Peta GIS') }}
+                <i class="fas fa-map-location-dot mr-2 text-emerald-600"></i> {{ __('GIS') }}
             </x-responsive-nav-link>
             @endif
         </div>

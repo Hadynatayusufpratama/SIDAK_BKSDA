@@ -54,7 +54,7 @@
                 <a href="{{ route('konservasi.dashboard') }}" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-forest-700 shadow-xs">Dashboard</a>
                 <a href="{{ route('konservasi.index') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Rekapitulasi</a>
                 <a href="{{ route('konservasi.create') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Tambah Data</a>
-                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Peta GIS</a>
+                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">GIS</a>
             </nav>
 
             <!-- Status & User Profile (DINAMIS SESUAI USER LOGIN) -->
@@ -118,42 +118,42 @@
         <!-- GRID STATISTIK DINAMIS DARI CONTROLLER -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <!-- Card 1: Total Volume Konservasi -->
+            <!-- Card 1: Total Entri -->
             <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
                 <div class="flex items-center justify-between text-slate-500 mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Akumulasi Volume</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Entri Data</span>
                     <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
                         <i class="fa-solid fa-database text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-900">{{ number_format($totalVolume ?? 0) }}</h3>
+                <h3 class="text-3xl font-black text-slate-900">{{ number_format($totalData ?? 0) }}</h3>
                 <p class="text-xs text-slate-500 mt-2 flex items-center">
-                    <span class="text-emerald-600 font-semibold mr-1.5"><i class="fa-solid fa-list-check"></i> {{ $totalData ?? 0 }}</span> Entri data berhasil diinput
+                    Seluruh data konservasi yang tersimpan
                 </p>
             </div>
 
-            <!-- Card 2: Kawasan / Sub-Bidang Aktif Terisi -->
+            <!-- Card 2: Cakupan Sub-Bidang -->
             <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
                 <div class="flex items-center justify-between text-slate-500 mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kawasan / Kategori Terisi</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Sub-Bidang Terisi</span>
                     <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
                         <i class="fa-solid fa-tree text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-900">{{ $totalKawasan ?? 0 }}</h3>
-                <p class="text-xs text-slate-500 mt-2">Kategori kawasan aktif terdata di database</p>
+                <h3 class="text-3xl font-black text-slate-900">{{ $totalSubBidangTerisi ?? 0 }} <span class="text-lg text-slate-400">/ {{ $totalSubBidang ?? 0 }}</span></h3>
+                <p class="text-xs text-slate-500 mt-2">Kategori yang memiliki entri dari enam bidang</p>
             </div>
 
-            <!-- Card 3: Titik Koordinat GIS -->
+            <!-- Card 3: Data Volume -->
             <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition">
                 <div class="flex items-center justify-between text-slate-500 mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Titik Koordinat GIS</span>
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
-                        <i class="fa-solid fa-location-dot text-lg"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Entri dengan Volume</span>
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+                        <i class="fa-solid fa-chart-column text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-900">{{ $totalLokasi ?? 0 }}</h3>
-                <p class="text-xs text-slate-500 mt-2">Pemantauan titik GIS lokasi real-time aktif</p>
+                <h3 class="text-3xl font-black text-slate-900">{{ number_format($totalEntriBervolume ?? 0) }}</h3>
+                <p class="text-xs text-slate-500 mt-2">Input yang memiliki nilai kuantitatif</p>
             </div>
 
         </div>
@@ -161,44 +161,56 @@
         <!-- SECTION BAWAH: GRAFIK & AKSES PETA GIS -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- Kolom Kiri: Visualisasi Grafik Dinamis Chart.js -->
+            <!-- Grafik jumlah entri per enam bidang -->
             <div class="lg:col-span-2 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80">
                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
                     <div>
                         <div class="flex items-center gap-2 text-emerald-700 mb-1">
-                            <i class="fa-solid fa-chart-pie text-sm"></i>
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider">Komposisi Data</span>
+                            <i class="fa-solid fa-chart-column text-sm"></i>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider">Perbandingan Entri</span>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-900">Sebaran Data per Bidang</h3>
-                        <p class="text-xs text-slate-500 mt-1">Perbandingan nilai rekap pada setiap bidang konservasi.</p>
+                        <h3 class="font-bold text-lg text-slate-900">Jumlah Entri per Enam Bidang</h3>
+                        <p class="text-xs text-slate-500 mt-1">Setiap bidang tetap ditampilkan, termasuk yang belum memiliki data.</p>
                     </div>
                     <span class="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] font-semibold text-slate-600">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        {{ count($chartLabels ?? []) }} bidang terdata
+                        {{ number_format($totalData ?? 0) }} entri tersimpan
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(220px,0.9fr)] gap-6 items-center">
-                    <div class="relative h-64 sm:h-72 min-w-0 flex items-center justify-center">
-                        <canvas id="konservasiChart" aria-label="Grafik sebaran nilai data konservasi per bidang" role="img"></canvas>
-                        <div id="chartEmpty" class="hidden absolute inset-0 flex-col items-center justify-center text-center px-6">
-                            <span class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
-                                <i class="fa-solid fa-chart-pie"></i>
-                            </span>
-                            <p class="text-sm font-semibold text-slate-600">Belum ada data untuk divisualisasikan</p>
-                            <p class="text-xs text-slate-400 mt-1">Data akan muncul setelah entri konservasi ditambahkan.</p>
-                        </div>
+                <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.2fr)_minmax(260px,0.8fr)] gap-6 items-start">
+                    <div class="relative h-[320px] min-w-0">
+                        <canvas id="bidangChart" aria-label="Jumlah entri pada enam bidang konservasi" role="img"></canvas>
                     </div>
 
                     <div class="lg:border-l lg:border-slate-100 lg:pl-6">
                         <div class="flex items-center justify-between mb-4">
                             <div>
-                                <h4 class="text-xs font-bold text-slate-800">Rincian per bidang</h4>
-                                <p class="text-[10px] text-slate-400 mt-0.5">Urut dari nilai rekap terbesar</p>
+                                <h4 class="text-xs font-bold text-slate-800">Cakupan subbidang</h4>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Jumlah kategori yang sudah memiliki entri</p>
                             </div>
-                            <i class="fa-solid fa-arrow-down-wide-short text-slate-400"></i>
                         </div>
-                        <div id="chartBreakdown" class="space-y-4 max-h-64 overflow-y-auto pr-1"></div>
+                        <div class="space-y-4">
+                            @foreach($bidangChart as $bidang)
+                                @php
+                                    $coverage = $bidang['total_subbidang'] > 0
+                                        ? ($bidang['subbidang_terisi'] / $bidang['total_subbidang']) * 100
+                                        : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex items-start justify-between gap-3 mb-1.5">
+                                        <div class="flex items-start gap-2 min-w-0">
+                                            <span class="w-2.5 h-2.5 mt-1 rounded-sm shrink-0" style="background-color: {{ $bidang['warna'] }}"></span>
+                                            <span class="text-[11px] font-semibold text-slate-700 leading-snug">{{ $bidang['nama'] }}</span>
+                                        </div>
+                                        <span class="text-[11px] font-bold text-slate-800 shrink-0">{{ number_format($bidang['jumlah_entri']) }}</span>
+                                    </div>
+                                    <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                                        <div class="h-full rounded-full" style="width: {{ $coverage }}%; background-color: {{ $bidang['warna'] }}"></div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mt-1">{{ $bidang['subbidang_terisi'] }} dari {{ $bidang['total_subbidang'] }} subbidang terisi</p>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
@@ -234,129 +246,168 @@
                 </div>
             </div>
 
+            <!-- Volume ditampilkan per subbidang agar satuan tidak tercampur -->
+            <div class="lg:col-span-3 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-5">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-700 mb-1">
+                            <i class="fa-solid fa-chart-bar text-sm"></i>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider">Data Kuantitatif</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900">Volume Input per Sub-Bidang</h3>
+                        <p class="text-xs text-slate-500 mt-1">Nilai dijumlahkan di dalam subbidang masing-masing, bukan antarjenis satuan.</p>
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-500">{{ count($volumeChart) }} subbidang memiliki nilai volume</span>
+                </div>
+
+                @if(count($volumeChart))
+                    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)] gap-6 items-start">
+                        <div class="max-h-[360px] overflow-y-auto pr-2">
+                            <div style="height: {{ max(220, count($volumeChart) * 42) }}px">
+                                <canvas id="volumeChart" aria-label="Nilai kuantitatif per sub-bidang" role="img"></canvas>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-slate-100">
+                            @foreach($volumeChart as $subBidang)
+                                <div class="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                                    <div class="min-w-0">
+                                        <p class="text-[11px] font-bold text-slate-800">{{ $subBidang['kode'] }} · {{ $subBidang['nama'] }}</p>
+                                        <p class="text-[10px] text-slate-400 mt-0.5">{{ $subBidang['nama_bidang'] }} · {{ $subBidang['entri_bervolume'] }} entri bervolume</p>
+                                    </div>
+                                    <span class="text-sm font-extrabold text-slate-900 shrink-0">{{ number_format($subBidang['jumlah_volume'], 0, ',', '.') }} {{ $subBidang['satuan'] }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="min-h-36 flex flex-col items-center justify-center text-center border border-dashed border-slate-200 rounded-xl px-5">
+                        <i class="fa-solid fa-chart-bar text-xl text-slate-300 mb-2"></i>
+                        <p class="text-sm font-semibold text-slate-600">Belum ada input dengan nilai volume</p>
+                        <p class="text-xs text-slate-400 mt-1">Grafik terisi otomatis saat kategori menyimpan nilai kuantitatif.</p>
+                    </div>
+                @endif
+            </div>
+
         </div>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const labels = @js($chartLabels ?? []);
-            const dataValues = @js($chartData ?? []);
-            const canvas = document.getElementById('konservasiChart');
-            const emptyState = document.getElementById('chartEmpty');
-            const breakdown = document.getElementById('chartBreakdown');
-            const palette = ['#047857', '#eab308', '#0284c7', '#f97316', '#be123c', '#14b8a6', '#64748b', '#84cc16'];
+            const bidangStats = @js($bidangChart ?? []);
+            const volumeStats = @js($volumeChart ?? []);
             const numberFormat = new Intl.NumberFormat('id-ID');
-            const totalValue = dataValues.reduce((sum, value) => sum + (Number(value) || 0), 0);
-
-            if (!labels.length || !dataValues.length || totalValue <= 0) {
-                canvas.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-                return;
-            }
-
-            const chartColors = labels.map((_, index) => palette[index % palette.length]);
-            const centerLabel = {
-                id: 'centerLabel',
-                afterDraw(chart) {
-                    const { ctx, chartArea } = chart;
-                    if (!chartArea) return;
-
-                    const centerX = (chartArea.left + chartArea.right) / 2;
-                    const centerY = (chartArea.top + chartArea.bottom) / 2;
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#94a3b8';
-                    ctx.font = '700 10px sans-serif';
-                    ctx.fillText('BIDANG AKTIF', centerX, centerY - 11);
-                    ctx.fillStyle = '#0f172a';
-                    ctx.font = '800 25px sans-serif';
-                    ctx.fillText(numberFormat.format(labels.length), centerX, centerY + 13);
-                    ctx.restore();
+            const sharedOptions = {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 650 },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        padding: 11,
+                        callbacks: {
+                            label(context) {
+                                return ` ${numberFormat.format(context.raw)} entri`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { precision: 0, color: '#64748b' },
+                        grid: { color: '#e2e8f0' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#334155', font: { weight: '600' } }
+                    }
                 }
             };
 
-            new Chart(canvas, {
-                type: 'doughnut',
+            new Chart(document.getElementById('bidangChart'), {
+                type: 'bar',
                 data: {
-                    labels,
+                    labels: bidangStats.map((bidang) => bidang.kode),
                     datasets: [{
-                        data: dataValues,
-                        backgroundColor: chartColors,
-                        borderColor: '#ffffff',
-                        borderWidth: 4,
-                        hoverOffset: 8,
-                        spacing: 2,
+                        data: bidangStats.map((bidang) => bidang.jumlah_entri),
+                        backgroundColor: bidangStats.map((bidang) => bidang.warna),
+                        borderRadius: 5,
+                        barThickness: 24,
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '72%',
-                    animation: { duration: 800, animateRotate: true, animateScale: true },
+                    ...sharedOptions,
                     plugins: {
-                        legend: { display: false },
+                        ...sharedOptions.plugins,
                         tooltip: {
-                            backgroundColor: '#0f172a',
-                            padding: 12,
-                            titleFont: { size: 12, weight: 'bold' },
-                            bodyFont: { size: 12 },
-                            cornerRadius: 8,
+                            ...sharedOptions.plugins.tooltip,
                             callbacks: {
+                                title(context) {
+                                    return bidangStats[context[0].dataIndex].nama;
+                                },
                                 label(context) {
-                                    const share = totalValue ? (context.raw / totalValue) * 100 : 0;
-                                    return ` ${numberFormat.format(context.raw)} · ${share.toFixed(1)}%`;
+                                    return ` ${numberFormat.format(context.raw)} entri`;
                                 }
                             }
                         }
                     }
                 },
-                plugins: [centerLabel]
             });
 
-            labels.map((label, index) => ({ label, value: Number(dataValues[index]) || 0, color: chartColors[index] }))
-                .sort((first, second) => second.value - first.value)
-                .forEach((item) => {
-                    const share = (item.value / totalValue) * 100;
-                    const row = document.createElement('div');
-                    row.className = 'space-y-2';
-
-                    const heading = document.createElement('div');
-                    heading.className = 'flex items-center justify-between gap-3';
-
-                    const name = document.createElement('div');
-                    name.className = 'flex items-center gap-2 min-w-0';
-                    const marker = document.createElement('span');
-                    marker.className = 'w-2.5 h-2.5 rounded-sm shrink-0';
-                    marker.style.backgroundColor = item.color;
-                    const labelText = document.createElement('span');
-                    labelText.className = 'text-[11px] font-medium text-slate-600 truncate';
-                    labelText.textContent = item.label;
-                    name.append(marker, labelText);
-
-                    const value = document.createElement('span');
-                    value.className = 'text-[11px] font-bold text-slate-800 shrink-0';
-                    value.textContent = numberFormat.format(item.value);
-                    heading.append(name, value);
-
-                    const track = document.createElement('div');
-                    track.className = 'h-1.5 rounded-full bg-slate-100 overflow-hidden';
-                    const fill = document.createElement('div');
-                    fill.className = 'h-full rounded-full';
-                    fill.style.width = `${share}%`;
-                    fill.style.backgroundColor = item.color;
-                    track.appendChild(fill);
-
-                    row.append(heading, track);
-                    breakdown.appendChild(row);
+            const volumeCanvas = document.getElementById('volumeChart');
+            if (volumeCanvas && volumeStats.length) {
+                const volumeColors = volumeStats.map((item) => {
+                    const bidang = bidangStats.find((field) => item.kode.startsWith(field.kode + '.'));
+                    return bidang?.warna ?? '#64748b';
                 });
+
+                new Chart(volumeCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: volumeStats.map((item) => item.kode),
+                        datasets: [{
+                            data: volumeStats.map((item) => item.jumlah_volume),
+                            backgroundColor: volumeColors,
+                            borderRadius: 5,
+                            barThickness: 22,
+                        }]
+                    },
+                    options: {
+                        ...sharedOptions,
+                        plugins: {
+                            ...sharedOptions.plugins,
+                            tooltip: {
+                                ...sharedOptions.plugins.tooltip,
+                                callbacks: {
+                                    title(context) {
+                                        const item = volumeStats[context[0].dataIndex];
+                                        return `${item.kode} · ${item.nama}`;
+                                    },
+                                    label(context) {
+                                        const item = volumeStats[context.dataIndex];
+                                        return ` ${numberFormat.format(context.raw)} ${item.satuan}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            ...sharedOptions.scales,
+                            x: {
+                                ...sharedOptions.scales.x,
+                                ticks: {
+                                    ...sharedOptions.scales.x.ticks,
+                                    callback(value) {
+                                        return numberFormat.format(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>

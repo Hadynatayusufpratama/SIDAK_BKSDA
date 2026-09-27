@@ -100,7 +100,7 @@
                 <a href="{{ route('konservasi.dashboard') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Dashboard</a>
                 <a href="{{ route('konservasi.index') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Rekapitulasi</a>
                 <a href="{{ route('konservasi.create') }}" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-forest-700 shadow-xs">Tambah Data</a>
-                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Peta GIS</a>
+                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">GIS</a>
             </nav>
 
             <!-- Status & User Profile -->
@@ -157,6 +157,17 @@
             </div>
         @endif
 
+        @if ($errors->any())
+            <div role="alert" class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl shadow-sm">
+                <p class="text-xs font-bold">Data belum tersimpan. Periksa kembali isian berikut:</p>
+                <ul class="mt-2 list-disc list-inside text-xs space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- CARD CONTAINER FORM -->
         <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm"
              x-data="{ 
@@ -171,6 +182,7 @@
                  ketersediaanZonasi: 'sudah',
                  adaPengesahanD03: '',
                  adaKegiatanB01: 'ya',
+                 adaAksesB02: 'ya',
                  adaDataLembagaC02: '',
                  bentukLembagaC02: '',
                  bentukLembagaUmumC02: ['Kebun Binatang', 'Taman Safari', 'Taman Satwa', 'Taman Satwa Khusus', 'Museum Zoologi', 'Kebun Botani', 'Taman Tumbuhan Khusus', 'Herbarium'],
@@ -322,7 +334,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_parsial_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -370,7 +382,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_provinsi_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -418,7 +430,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_penetapan_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -517,7 +529,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">File SK Penetapan Dokumen RPJP (pdf):</label>
-                                <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 20 Mb</p>
+                                <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                 <input type="file" name="sk_rpjp_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                             </div>
                         </div>
@@ -903,7 +915,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="file_sk_zonasi" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -1346,7 +1358,11 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto ODTWA (JPG/PNG):</label>
+<<<<<<< HEAD
+                                <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 10 MB per file.</p>
+=======
                                 <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 1 Mb</p>
+>>>>>>> temp-fix
                                 <input type="file" name="foto_odtwa" accept="image/png,image/jpeg" class="w-full max-w-md h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                             </div>
 
@@ -1730,7 +1746,11 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto Sarana &amp; Prasarana (JPG/PNG): <span class="text-rose-500">*</span></label>
+<<<<<<< HEAD
+                                <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto, masing-masing berukuran maksimal 10 MB.</p>
+=======
                                 <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto dengan ukuran maksimal 1 Mb</p>
+>>>>>>> temp-fix
                                 <div class="flex flex-col md:flex-row gap-4 items-start"><input type="file" name="foto_sarana_prasarana_d07[]" accept="image/png,image/jpeg" multiple x-bind:required="adaSaranaPrasaranaD07 === 'ya'" class="w-full md:w-1/2 h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div class="grid grid-cols-3 gap-3 w-full md:w-1/2">@foreach (range(1, 3) as $photoNumber)<div class="h-28 rounded-xl border border-slate-300 bg-white flex items-start p-2 text-xs font-bold text-slate-800">{{ $photoNumber }}</div>@endforeach</div></div>
                             </div>
 
@@ -2213,7 +2233,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin:</label><input type="date" name="tanggal_berakhir_izin_c02" x-bind:required="adaDataLembagaC02 === 'ya' && bentukLembagaUmumC02.includes(bentukLembagaC02)" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><p class="mt-2 text-[11px] text-slate-500">Tanggal berakhir izin wajib diisi jika bentuk lembaga konservasi termasuk kategori lembaga konservasi umum</p></div>
                         </div>
+<<<<<<< HEAD
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c02" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2269,7 +2293,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
+<<<<<<< HEAD
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c04" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2469,7 +2497,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
+<<<<<<< HEAD
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang Diedarkan: <span class="text-rose-500">*</span></label><input type="text" name="spesies_diedarkan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c06" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
@@ -3628,9 +3660,185 @@
 
                 </div>
 
+<<<<<<< HEAD
                 <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14' && selectedSubBidangKode !== 'C.15' && selectedSubBidangKode !== 'C.16' && selectedSubBidangKode !== 'C.17'">
                     <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan:</label>
                     <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-forest-600 outline-none text-xs font-medium"></textarea>
+=======
+                <!-- ========================================================================= -->
+                <!-- FORM DINAMIS SUB-BIDANG B.02: Akses Tradisional & Kemitraan                -->
+                <!-- ========================================================================= -->
+                <div x-show="selectedSubBidangKode === 'B.02'" x-transition class="space-y-6 pt-2">
+                    <fieldset :disabled="selectedSubBidangKode !== 'B.02'" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_b02" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kawasan Konservasi: <span class="text-rose-500">*</span></label>
+                            <select name="kawasan_nama_b02" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">-- Pilih Kawasan Konservasi --</option>
+                                @foreach ($kawasanList as $kawasan)
+                                    <option value="{{ $kawasan }}">{{ $kawasan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-50/80 border border-slate-200 rounded-xl">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700">Ada Pemberian Akses Pemanfaatan Tradisional dan Kemitraan Konservasi di kawasan tersebut?</label>
+                            <p class="text-[11px] text-slate-500 mt-1">Pilih tidak jika tidak ada/nihil.</p>
+                        </div>
+                        <div class="flex items-center gap-6 shrink-0">
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                <input type="radio" name="ada_akses_b02" value="ya" x-model="adaAksesB02" class="text-forest-600 focus:ring-forest-600">
+                                Ya, ada
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                <input type="radio" name="ada_akses_b02" value="tidak" x-model="adaAksesB02" class="text-forest-600 focus:ring-forest-600">
+                                Tidak ada (Nihil)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div x-show="adaAksesB02 === 'ya'" x-transition class="space-y-6">
+                        <fieldset :disabled="adaAksesB02 !== 'ya'" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-2">Jenis Pengelolaan Bersama Masyarakat: <span class="text-rose-500">*</span></label>
+                                <div class="flex flex-wrap gap-x-6 gap-y-3">
+                                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                        <input type="radio" name="jenis_pengelolaan_b02" value="akses_tradisional" required class="text-forest-600 focus:ring-forest-600">
+                                        Pemberian Akses Pemanfaatan Tradisional
+                                    </label>
+                                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                                        <input type="radio" name="jenis_pengelolaan_b02" value="kemitraan_konservasi" class="text-forest-600 focus:ring-forest-600">
+                                        Kemitraan Konservasi
+                                    </label>
+                                </div>
+                            </div>
+
+                            <fieldset class="p-5 bg-white border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">PEMBERIAN AKSES PEMANFAATAN TRADISIONAL</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">Jenis Akses: <span class="text-rose-500">*</span></label>
+                                        <div class="space-y-2">
+                                            @foreach([
+                                                'pemungutan_hhbk' => 'Pemungutan HHBK',
+                                                'budidaya_tradisional' => 'Budidaya Tradisional',
+                                                'perburuan_tradisional' => 'Perburuan Tradisional',
+                                                'pemanfaatan_sda_perairan' => 'Pemanfaatan SDA Perairan',
+                                                'lainnya' => 'Lainnya',
+                                            ] as $jenisAksesValue => $jenisAksesLabel)
+                                                <label class="flex items-center gap-2 text-xs text-slate-700">
+                                                    <input type="radio" name="jenis_akses_b02" value="{{ $jenisAksesValue }}" required class="text-forest-600 focus:ring-forest-600">
+                                                    {{ $jenisAksesLabel }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Jenis yang dimanfaatkan: <span class="text-rose-500">*</span></label>
+                                        <textarea name="jenis_dimanfaatkan_b02" rows="5" required placeholder="Masukan jenis yang dimanfaatkan..." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">INFORMASI KELOMPOK MASYARAKAT</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Kelompok: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nama_kelompok_b02" required placeholder="Nama kelompok" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-2">Masyarakat Hukum Adat?: <span class="text-rose-500">*</span></label>
+                                        <div class="flex gap-6 py-2">
+                                            <label class="inline-flex items-center gap-2 text-xs text-slate-700"><input type="radio" name="masyarakat_hukum_adat_b02" value="ya" required class="text-forest-600"> Ya</label>
+                                            <label class="inline-flex items-center gap-2 text-xs text-slate-700"><input type="radio" name="masyarakat_hukum_adat_b02" value="tidak" class="text-forest-600"> Tidak/Bukan</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Laki-laki: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" name="jumlah_laki_b02" min="0" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Orang</span></div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Perempuan: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" name="jumlah_perempuan_b02" min="0" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Orang</span></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kabupaten/Kota: <span class="text-rose-500">*</span></label>
+                                        <select id="kabupaten_b02_select" name="kabupaten_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kabupaten/kota</option></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kecamatan: <span class="text-rose-500">*</span></label>
+                                        <select id="kecamatan_b02_select" name="kecamatan_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kecamatan</option></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Kelurahan/Desa: <span class="text-rose-500">*</span></label>
+                                        <select id="desa_b02_select" name="desa_b02" required disabled class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs disabled:bg-slate-100"><option value="">Pilih kelurahan/desa</option></select>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="provinsi_b02" name="provinsi_b02" value="Sulawesi Tengah">
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">INFORMASI PERJANJIAN KERJASAMA</legend>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Surat Dirjen KSDAE: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nomor_surat_dirjen_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Perjanjian Kerjasama: <span class="text-rose-500">*</span></label>
+                                        <input type="text" name="nomor_pks_b02" required placeholder="Nomor surat" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Mulai KS: <span class="text-rose-500">*</span></label>
+                                        <input type="date" name="tanggal_mulai_ks_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir PKS: <span class="text-rose-500">*</span></label>
+                                        <input type="date" name="tanggal_akhir_pks_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">Luas Area Pemanfaatan: <span class="text-rose-500">*</span></label>
+                                        <div class="flex"><input type="number" step="0.01" min="0" name="luas_area_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-l-xl text-xs"><span class="px-3 py-2 bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl text-xs text-slate-500">Ha</span></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Zona/Blok: <span class="text-rose-500">*</span></label>
+                                    <input type="text" name="zona_blok_b02" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Kerjasama (PDF)</label>
+                                    <p class="text-[11px] text-slate-500 mb-2">Format PDF, maksimal 10 MB per file.</p>
+                                    <input type="file" name="dokumen_kerjasama_b02" accept=".pdf,application/pdf" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="p-5 bg-slate-50/80 border border-slate-200 rounded-xl space-y-3">
+                                <legend class="px-2 text-xs font-extrabold text-slate-800">LOKASI GEOGRAFIS PERJANJIAN KERJASAMA</legend>
+                                <p class="text-xs text-slate-600">Data area lokasi pemberian akses dan kemitraan konservasi tersedia dalam bentuk polygon?</p>
+                                <label class="block text-xs font-bold text-slate-700">Unggah Polygon Area (Shapefile ZIP)</label>
+                                <p class="text-[11px] text-slate-500">Shapefile berisi .shp, .dbf, .prj, .shx, dan .cpg dalam satu file ZIP; maksimal 10 MB.</p>
+                                <input type="file" name="shapefile_kerjasama_b02" accept=".zip,application/zip" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
+                            </fieldset>
+                        </fieldset>
+                    </div>
+                    </fieldset>
+>>>>>>> 23d71526497aa8bc1353a93efea120528a1f5a59
                 </div>
 
                 <!-- Action Button -->
@@ -3644,11 +3852,6 @@
         </div>
 
     </main>
-
-    <!-- FOOTER -->
-    <footer class="mt-auto border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
-    </footer>
 
     <!-- Script AJAX Sub-Bidang & Wilayah Indonesia -->
     <script>
@@ -3969,6 +4172,8 @@
         syncHiddenPanelControls();
 
         // --- 1. SCRIPT FOR SUB-BIDANG ---
+        const subBidangUrlTemplate = @json(route('konservasi.sub-bidang', ['bidang_id' => '__BIDANG_ID__']), JSON_UNESCAPED_SLASHES);
+
         document.getElementById('bidang_select').addEventListener('change', function() {
             let bidangId = this.value;
             let subSelect = document.getElementById('sub_bidang_select');
@@ -3981,7 +4186,12 @@
             subSelect.disabled = true;
 
             if (bidangId) {
+<<<<<<< HEAD
                 fetch('{{ url('/get-sub-bidang') }}/' + encodeURIComponent(bidangId))
+=======
+                const subBidangUrl = subBidangUrlTemplate.replace('__BIDANG_ID__', encodeURIComponent(bidangId));
+                fetch(subBidangUrl)
+>>>>>>> 23d71526497aa8bc1353a93efea120528a1f5a59
                     .then(response => response.json())
                     .then(data => {
                         subSelect.innerHTML = '<option value="">-- Pilih Sub-Bidang Kategori --</option>';
@@ -4115,6 +4325,57 @@
                             });
                             desaSelect.disabled = false;
                         });
+                }
+            });
+        }
+        const kabupatenB02 = document.getElementById('kabupaten_b02_select');
+        const kecamatanB02 = document.getElementById('kecamatan_b02_select');
+        const desaB02 = document.getElementById('desa_b02_select');
+        const wilayahApi = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+        function setWilayahOptions(select, placeholder, entries) {
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            entries.forEach(entry => {
+                const option = document.createElement('option');
+                option.value = entry.name;
+                option.textContent = entry.name;
+                option.dataset.id = entry.id ?? '';
+                select.appendChild(option);
+            });
+            select.disabled = false;
+        }
+
+        if (kabupatenB02 && kecamatanB02 && desaB02) {
+            fetch(`${wilayahApi}/regencies/72.json`)
+                .then(response => response.json())
+                .then(regencies => setWilayahOptions(kabupatenB02, 'Pilih kabupaten/kota', regencies))
+                .catch(() => {
+                    kabupatenB02.innerHTML = '<option value="">Gagal memuat kabupaten/kota</option>';
+                });
+
+            kabupatenB02.addEventListener('change', function() {
+                const regencyId = this.options[this.selectedIndex]?.dataset.id;
+                kecamatanB02.disabled = true;
+                desaB02.disabled = true;
+                kecamatanB02.innerHTML = '<option value="">Pilih kecamatan</option>';
+                desaB02.innerHTML = '<option value="">Pilih kelurahan/desa</option>';
+
+                if (regencyId) {
+                    fetch(`${wilayahApi}/districts/${regencyId}.json`)
+                        .then(response => response.json())
+                        .then(districts => setWilayahOptions(kecamatanB02, 'Pilih kecamatan', districts));
+                }
+            });
+
+            kecamatanB02.addEventListener('change', function() {
+                const districtId = this.options[this.selectedIndex]?.dataset.id;
+                desaB02.disabled = true;
+                desaB02.innerHTML = '<option value="">Pilih kelurahan/desa</option>';
+
+                if (districtId) {
+                    fetch(`${wilayahApi}/villages/${districtId}.json`)
+                        .then(response => response.json())
+                        .then(villages => setWilayahOptions(desaB02, 'Pilih kelurahan/desa', villages));
                 }
             });
         }
