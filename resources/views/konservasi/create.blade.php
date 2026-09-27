@@ -6,6 +6,8 @@
     <title>Input Data - SIDAK BKSDA Sulawesi Tengah</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Alpine.js untuk Form Dinamis Conditional -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,6 +55,22 @@
             'CA Gunung Dako (Satker: Balai KSDA Sulawesi Tengah)',
             'TWA Bancea (Satker: Balai KSDA Sulawesi Tengah)',
             'SM Bakiriang (Satker: Balai KSDA Sulawesi Tengah)',
+        ];
+        $kategoriPerjumpaanC01 = [
+            'Human Observation' => [
+                ['Perjumpaan langsung', '16.336'], ['Jejak', '17.086'], ['Suara', '16.886'],
+                ['Feses', '9.272'], ['Sarang', '7.312'], ['Cakaran', '3.704'],
+                ['Kubangan', '1.844'], ['Satwa Mati', '58'],
+            ],
+            'Machine observation' => [
+                ['Data GPS tracking', '12.860'], ['Kamera jebak', '2.196'],
+                ['Aerial data/drone thermal', '6'], ['Audio recording', '0'],
+                ['Radio telemetri', '0'], ['Rekaman dari berita/media', '0'],
+            ],
+            'Living Specimen' => [['Living Speciemen (satwa & tumbuhan hidup di luar habitatnya/fasilitas eksitu)', '7']],
+            'Material Citation' => [['Material Citation (data dari publikasi)', '4']],
+            'Preserve Specimen' => [['Preserve Specimen (data dari museum alam)', '1']],
+            'Fossil Specimen' => [['Fossil Specimen', '28']],
         ];
     @endphp
 
@@ -153,6 +171,27 @@
                  ketersediaanZonasi: 'sudah',
                  adaPengesahanD03: '',
                  adaKegiatanB01: 'ya',
+                 adaDataLembagaC02: '',
+                 bentukLembagaC02: '',
+                 bentukLembagaUmumC02: ['Kebun Binatang', 'Taman Safari', 'Taman Satwa', 'Taman Satwa Khusus', 'Museum Zoologi', 'Kebun Botani', 'Taman Tumbuhan Khusus', 'Herbarium'],
+                 adaDataKoleksiC03: '',
+                 spesiesKoleksiC03: '',
+                 adaDataPenangkaranC04: '',
+                 adaDataJenisTslC05: '',
+                 spesiesDitangkarkanC05: '',
+                 adaDataPengedarC06: '',
+                 adaRealisasiPengambilanC08: '',
+                 tampilkanKuotaTangkapC08: false,
+                 adaRealisasiEksporC09: '',
+                 adaRealisasiEksporC10: '',
+                 adaDataSitaanC11: '',
+                 adaPnbTslC12: '',
+                 adaInteraksiNegatifC14: '',
+                 spesiesInteraksiC14: '',
+                 temuanPerjumpaanSpesiesC01: '',
+                 kategoriPerjumpaanC01: '',
+                 spesiesC01: '',
+                 spesiesLainnyaC01: '',
                  adaDataOdtwaBaru: '',
                  adaPenerbitanIzinPbp: '',
                  adaSaranaPrasaranaD07: '',
@@ -2098,6 +2137,903 @@
                     </div>
                 @endforeach
 
+                <div x-cloak x-show="selectedSubBidangKode === 'C.02'" x-transition class="space-y-6 pt-2">
+                    <div class="md:w-1/2">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                        <select name="tahun_c02" x-bind:required="selectedSubBidangKode === 'C.02'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih tahun</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c02" x-bind:required="selectedSubBidangKode === 'C.02'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada data Lembaga Konservasi yang belum terdata?</label>
+                        <p class="text-[11px] text-slate-500">Pilih ya, ada jika belum tersedia data lembaga konservasi</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_lembaga_c02" value="ya" x-model="adaDataLembagaC02" x-bind:required="selectedSubBidangKode === 'C.02'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_lembaga_c02" value="tidak" x-model="adaDataLembagaC02" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataLembagaC02 === 'ya'" x-transition x-init="$watch('adaDataLembagaC02', value => { if (value === 'ya') $nextTick(() => window.initC02Map()) })" class="space-y-6 pt-2">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-700 mb-1">Nama Lembaga Konservasi: <span class="text-rose-500">*</span></label><input type="text" name="nama_lembaga_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Bentuk Lembaga: <span class="text-rose-500">*</span></label>
+                                <select name="bentuk_lembaga_c02" x-model="bentukLembagaC02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                    <option value="">Pilih bentuk lembaga</option>
+                                    <option value="Pusat Penyelamatan Satwa">Pusat Penyelamatan Satwa</option>
+                                    <option value="Pusat Latihan Satwa Khusus">Pusat Latihan Satwa Khusus</option>
+                                    <option value="Pusat Rehabilitasi Satwa">Pusat Rehabilitasi Satwa</option>
+                                    <option value="Kebun Binatang">Kebun Binatang</option>
+                                    <option value="Taman Safari">Taman Safari</option>
+                                    <option value="Taman Satwa">Taman Satwa</option>
+                                    <option value="Taman Satwa Khusus">Taman Satwa Khusus</option>
+                                    <option value="Museum Zoologi">Museum Zoologi</option>
+                                    <option value="Kebun Botani">Kebun Botani</option>
+                                    <option value="Taman Tumbuhan Khusus">Taman Tumbuhan Khusus</option>
+                                    <option value="Herbarium">Herbarium</option>
+                                </select>
+                            </div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK/LOKASI GEOGRAFIS LEMBAGA KONSERVASI (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c02" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">X</span><input id="latitude-c02" type="number" step="any" name="latitude_c02" placeholder="-0.897123" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">Y</span><input id="longitude-c02" type="number" step="any" name="longitude_c02" placeholder="119.87123" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Alamat Lembaga Konservasi: <span class="text-rose-500">*</span></label><textarea name="alamat_lembaga_c02" rows="4" x-bind:required="adaDataLembagaC02 === 'ya'" placeholder="Alamat lembaga konservasi.." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-700 mb-1">Nomor Dokumen Perizinan: <span class="text-rose-500">*</span></label><input type="text" name="nomor_dokumen_perizinan_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Luas Areal: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" step="any" name="luas_areal_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">Ha</span></div></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin:</label><input type="date" name="tanggal_berakhir_izin_c02" x-bind:required="adaDataLembagaC02 === 'ya' && bentukLembagaUmumC02.includes(bentukLembagaC02)" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><p class="mt-2 text-[11px] text-slate-500">Tanggal berakhir izin wajib diisi jika bentuk lembaga konservasi termasuk kategori lembaga konservasi umum</p></div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c02" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.04'" x-transition class="space-y-6 pt-2">
+                    <div class="md:w-1/2">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                        <select name="tahun_c04" x-bind:required="selectedSubBidangKode === 'C.04'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih tahun</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c04" x-bind:required="selectedSubBidangKode === 'C.04'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada data Penangkaran yang belum terdata?</label>
+                        <p class="text-[11px] text-slate-500">Pilih ya, ada jika belum tersedia data penangkaran</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_penangkaran_c04" value="ya" x-model="adaDataPenangkaranC04" x-bind:required="selectedSubBidangKode === 'C.04'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_penangkaran_c04" value="tidak" x-model="adaDataPenangkaranC04" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataPenangkaranC04 === 'ya'" x-transition x-init="$watch('adaDataPenangkaranC04', value => { if (value === 'ya') $nextTick(() => window.initC04Map()) })" class="space-y-6 pt-2">
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Penangkar: <span class="text-rose-500">*</span></label><input type="text" name="nama_penangkar_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK/LOKASI GEOGRAFIS PENANGKARAN (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c04" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">X</span><input id="latitude-c04" type="number" step="any" name="latitude_c04" placeholder="-0.897123" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">Y</span><input id="longitude-c04" type="number" step="any" name="longitude_c04" placeholder="119.87123" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Alamat Penangkaran: <span class="text-rose-500">*</span></label><textarea name="alamat_penangkaran_c04" rows="4" x-bind:required="adaDataPenangkaranC04 === 'ya'" placeholder="Alamat penangkaran.." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Unit Penangkaran:</label><textarea name="lokasi_unit_penangkaran_c04" rows="4" placeholder="Lokasi Unit penangkaran.." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-700 mb-1">Nomor Dokumen Perizinan: <span class="text-rose-500">*</span></label><input type="text" name="nomor_dokumen_perizinan_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Luas Areal: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" step="any" name="luas_areal_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">Ha</span></div></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c04" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.03'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c03" x-bind:required="selectedSubBidangKode === 'C.03'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Semester: <span class="text-rose-500">*</span></label>
+                            <select name="periode_semester_c03" x-bind:required="selectedSubBidangKode === 'C.03'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                <option value="Semester I">Semester I</option>
+                                <option value="Semester II">Semester II</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c03" x-bind:required="selectedSubBidangKode === 'C.03'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Data Koleksi TSL di Lembaga Konservasi yang belum terdata pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada data koleksi TSL di lembaga konservasi</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_koleksi_c03" value="ya" x-model="adaDataKoleksiC03" x-bind:required="selectedSubBidangKode === 'C.03'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_koleksi_c03" value="tidak" x-model="adaDataKoleksiC03" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataKoleksiC03 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lembaga Konservasi: <span class="text-rose-500">*</span></label>
+                            <select name="lembaga_konservasi_c03" x-bind:required="adaDataKoleksiC03 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih lembaga konservasi</option>
+                                @foreach ($lembagaKonservasiList as $namaLembaga)
+                                    <option value="{{ $namaLembaga }}">{{ $namaLembaga }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies Koleksi: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_koleksi_c03" x-model="spesiesKoleksiC03" x-bind:required="adaDataKoleksiC03 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesKoleksiC03 === 'Lainnya'" type="text" name="nama_spesies_lainnya_c03" x-bind:required="adaDataKoleksiC03 === 'ya' && spesiesKoleksiC03 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            @foreach ([['jantan_c03', 'Jantan'], ['betina_c03', 'Betina'], ['belum_diketahui_c03', 'Belum Diketahui']] as [$fieldJumlahC03, $labelJumlahC03])
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelJumlahC03 }}: <span class="text-rose-500">*</span></label>
+                                    <div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="{{ $fieldJumlahC03 }}" value="0" x-bind:required="adaDataKoleksiC03 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">indv.</span></div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c03" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.05'" x-transition class="space-y-6 pt-2">
+                    <div class="md:w-1/2">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                        <select name="tahun_c05" x-bind:required="selectedSubBidangKode === 'C.05'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih tahun</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c05" x-bind:required="selectedSubBidangKode === 'C.05'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Jenis TSL yang Ditangkarkan namun belum terdata pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih ya, ada jika ingin menambahkan data jenis TSL pada penangkar</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_jenis_tsl_c05" value="ya" x-model="adaDataJenisTslC05" x-bind:required="selectedSubBidangKode === 'C.05'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_jenis_tsl_c05" value="tidak" x-model="adaDataJenisTslC05" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataJenisTslC05 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Penangkar: <span class="text-rose-500">*</span></label>
+                            <select name="penangkar_c05" x-bind:required="adaDataJenisTslC05 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih penangkar</option>
+                                @foreach ($penangkarList as $namaPenangkar)
+                                    <option value="{{ $namaPenangkar }}">{{ $namaPenangkar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang ditangkarkan: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_ditangkar_c05" x-model="spesiesDitangkarkanC05" x-bind:required="adaDataJenisTslC05 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesDitangkarkanC05 === 'Lainnya'" type="text" name="nama_spesies_lainnya_c05" x-bind:required="adaDataJenisTslC05 === 'ya' && spesiesDitangkarkanC05 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach ([['jumlah_indukan_c05', 'Jumlah Indukan'], ['hasil_penangkaran_c05', 'Hasil Penangkaran'], ['hasil_pemanfaatan_tahun_ini_c05', 'Hasil Pemanfaatan Tahun ini'], ['sisa_stok_hasil_pemanfaatan_c05', 'Sisa Stok Hasil Pemanfaatan']] as [$fieldJumlahC05, $labelJumlahC05])
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelJumlahC05 }}: <span class="text-rose-500">*</span></label>
+                                    <div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="{{ $fieldJumlahC05 }}" value="0" x-bind:required="adaDataJenisTslC05 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">indv.</span></div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c05" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.06'" x-transition class="space-y-6 pt-2">
+                    <div class="md:w-1/2">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                        <select name="tahun_c06" x-bind:required="selectedSubBidangKode === 'C.06'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih tahun</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c06" x-bind:required="selectedSubBidangKode === 'C.06'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada data Pengedar TSL yang belum terdata?</label>
+                        <p class="text-[11px] text-slate-500">Pilih ya, ada jika belum tersedia data pengedar</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_pengedar_c06" value="ya" x-model="adaDataPengedarC06" x-bind:required="selectedSubBidangKode === 'C.06'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_pengedar_c06" value="tidak" x-model="adaDataPengedarC06" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataPengedarC06 === 'ya'" x-transition x-init="$watch('adaDataPengedarC06', value => { if (value === 'ya') $nextTick(() => window.initC06Map()) })" class="space-y-6 pt-2">
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Nama Pengedar TSL: <span class="text-rose-500">*</span></label><input type="text" name="nama_pengedar_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">Kategori: <span class="text-rose-500">*</span></label>
+                            <div class="flex items-center gap-6">
+                                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="kategori_pengedar_c06" value="Dalam Negeri" x-bind:required="adaDataPengedarC06 === 'ya'" class="text-forest-600 focus:ring-forest-600"><span class="text-xs font-medium text-slate-700">Dalam Negeri</span></label>
+                                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="kategori_pengedar_c06" value="Luar Negeri" class="text-forest-600 focus:ring-forest-600"><span class="text-xs font-medium text-slate-700">Luar Negeri</span></label>
+                            </div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK/LOKASI GEOGRAFIS PENGEDAR TSL (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c06" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">X</span><input id="latitude-c06" type="number" step="any" name="latitude_c06" placeholder="-0.897123" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">Y</span><input id="longitude-c06" type="number" step="any" name="longitude_c06" placeholder="119.87123" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Unit Pengedar TSL:</label><textarea name="lokasi_unit_pengedar_c06" rows="4" placeholder="Lokasi Unit Pengedar TSL.." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-700 mb-1">Nomor Dokumen Perizinan: <span class="text-rose-500">*</span></label><input type="text" name="nomor_dokumen_perizinan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Luas Areal: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" step="any" name="luas_areal_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">Ha</span></div></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang Diedarkan: <span class="text-rose-500">*</span></label><input type="text" name="spesies_diedarkan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c06" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.08'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c08" x-bind:required="selectedSubBidangKode === 'C.08'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Triwulan: <span class="text-rose-500">*</span></label>
+                            <select name="periode_triwulan_c08" x-bind:required="selectedSubBidangKode === 'C.08'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                <option value="Triwulan I">Triwulan I</option>
+                                <option value="Triwulan II">Triwulan II</option>
+                                <option value="Triwulan III">Triwulan III</option>
+                                <option value="Triwulan IV">Triwulan IV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c08" x-bind:required="selectedSubBidangKode === 'C.08'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Realisasi Pengambilan/Penangkapan TSL di Satuan Kerja anda?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada realisasi pengambilan/penangkapan tumbuhan dan satwa liar</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_pengambilan_c08" value="ya" x-model="adaRealisasiPengambilanC08" x-bind:required="selectedSubBidangKode === 'C.08'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_pengambilan_c08" value="tidak" x-model="adaRealisasiPengambilanC08" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaRealisasiPengambilanC08 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Species: <span class="text-rose-500">*</span></label>
+                            <select name="nama_spesies_c08" x-bind:required="adaRealisasiPengambilanC08 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis: <span class="text-rose-500">*</span></label><input type="text" name="jenis_tsl_c08" x-bind:required="adaRealisasiPengambilanC08 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Provinsi: <span class="text-rose-500">*</span></label><select id="provinsi_c08" name="provinsi_c08" x-bind:required="adaRealisasiPengambilanC08 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><option value="">Pilih provinsi</option></select></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between gap-3"><h4 class="text-xs font-extrabold text-slate-800">Kuota Tangkap</h4><button type="button" @click="tampilkanKuotaTangkapC08 = !tampilkanKuotaTangkapC08" class="text-xs font-medium text-blue-600 hover:text-blue-800" x-text="tampilkanKuotaTangkapC08 ? 'Sembunyikan kuota tangkap' : 'Tampilkan kuota tangkap'"></button></div>
+                                <div x-cloak x-show="tampilkanKuotaTangkapC08" x-transition class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume:</label><input type="text" readonly placeholder="Belum tersedia" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan:</label><input type="text" readonly placeholder="-" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-extrabold text-slate-800">Realisasi Tangkap</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume: <span class="text-rose-500">*</span></label><input type="number" min="0" step="any" name="realisasi_volume_c08" x-bind:required="adaRealisasiPengambilanC08 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan: <span class="text-rose-500">*</span></label><input type="text" name="realisasi_satuan_c08" x-bind:required="adaRealisasiPengambilanC08 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c08" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.09'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c09" x-bind:required="selectedSubBidangKode === 'C.09'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Triwulan: <span class="text-rose-500">*</span></label>
+                            <select name="periode_triwulan_c09" x-bind:required="selectedSubBidangKode === 'C.09'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                <option value="Triwulan I">Triwulan I</option>
+                                <option value="Triwulan II">Triwulan II</option>
+                                <option value="Triwulan III">Triwulan III</option>
+                                <option value="Triwulan IV">Triwulan IV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c09" x-bind:required="selectedSubBidangKode === 'C.09'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Realisasi Ekspor TSL Penangkaran di Satuan Kerja Anda?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada realisasi ekspor tumbuhan dan satwa liar di penangkaran</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_ekspor_c09" value="ya" x-model="adaRealisasiEksporC09" x-bind:required="selectedSubBidangKode === 'C.09'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_ekspor_c09" value="tidak" x-model="adaRealisasiEksporC09" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaRealisasiEksporC09 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Penangkar: <span class="text-rose-500">*</span></label>
+                            <select name="penangkar_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih nama penangkar</option>
+                                @foreach ($penangkarList as $namaPenangkar)
+                                    <option value="{{ $namaPenangkar }}">{{ $namaPenangkar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Spesies: <span class="text-rose-500">*</span></label>
+                            <select name="nama_spesies_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis: <span class="text-rose-500">*</span></label><input type="text" name="jenis_tsl_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Negara Tujuan: <span class="text-rose-500">*</span></label><select name="negara_tujuan_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><option value="">Pilih negara tujuan</option>@foreach ($negaraTujuanC09 as $negara)<option value="{{ $negara }}">{{ $negara }}</option>@endforeach</select></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-extrabold text-slate-800">Kuota Ekspor</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume:</label><input type="text" readonly placeholder="Belum tersedia" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan:</label><input type="text" readonly placeholder="-" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-extrabold text-slate-800">Realisasi Ekspor</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume: <span class="text-rose-500">*</span></label><input type="number" min="0" step="any" name="realisasi_ekspor_volume_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan: <span class="text-rose-500">*</span></label><input type="text" name="realisasi_ekspor_satuan_c09" x-bind:required="adaRealisasiEksporC09 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c09" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.10'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c10" x-bind:required="selectedSubBidangKode === 'C.10'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Triwulan: <span class="text-rose-500">*</span></label>
+                            <select name="periode_triwulan_c10" x-bind:required="selectedSubBidangKode === 'C.10'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                <option value="Triwulan I">Triwulan I</option>
+                                <option value="Triwulan II">Triwulan II</option>
+                                <option value="Triwulan III">Triwulan III</option>
+                                <option value="Triwulan IV">Triwulan IV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c10" x-bind:required="selectedSubBidangKode === 'C.10'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Realisasi Ekspor TSL Pengambilan dari Alam di Satuan Kerja Anda?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada realisasi ekspor tumbuhan dan satwa liar hasil pengambilan dari alam</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_ekspor_c10" value="ya" x-model="adaRealisasiEksporC10" x-bind:required="selectedSubBidangKode === 'C.10'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_realisasi_ekspor_c10" value="tidak" x-model="adaRealisasiEksporC10" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaRealisasiEksporC10 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Pengedar TSL: <span class="text-rose-500">*</span></label>
+                            <select name="pengedar_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih nama pengedar</option>
+                                @foreach ($pengedarList as $namaPengedar)
+                                    <option value="{{ $namaPengedar }}">{{ $namaPengedar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Spesies: <span class="text-rose-500">*</span></label>
+                            <select name="nama_spesies_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Jenis: <span class="text-rose-500">*</span></label><input type="text" name="jenis_tsl_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Negara Tujuan: <span class="text-rose-500">*</span></label><select name="negara_tujuan_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><option value="">Pilih negara tujuan</option>@foreach ($negaraTujuanC09 as $negara)<option value="{{ $negara }}">{{ $negara }}</option>@endforeach</select></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-extrabold text-slate-800">Kuota Ekspor</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume:</label><input type="text" readonly placeholder="Belum tersedia" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan:</label><input type="text" readonly placeholder="-" class="w-full rounded-xl border border-slate-300 bg-slate-100 p-3 text-xs text-slate-500"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-extrabold text-slate-800">Realisasi Ekspor</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Volume: <span class="text-rose-500">*</span></label><input type="number" min="0" step="any" name="realisasi_ekspor_volume_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Satuan: <span class="text-rose-500">*</span></label><input type="text" name="realisasi_ekspor_satuan_c10" x-bind:required="adaRealisasiEksporC10 === 'ya'" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:outline-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c10" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.11'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c11" x-bind:required="selectedSubBidangKode === 'C.11'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c11" x-bind:required="selectedSubBidangKode === 'C.11'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c11" x-bind:required="selectedSubBidangKode === 'C.11'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Sitaan/Penyerahan/Penyelamatan Satwa pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada sitaan/penyerahan/penyelamatan satwa</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_sitaan_c11" value="ya" x-model="adaDataSitaanC11" x-bind:required="selectedSubBidangKode === 'C.11'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_data_sitaan_c11" value="tidak" x-model="adaDataSitaanC11" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaDataSitaanC11 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c11" x-bind:required="adaDataSitaanC11 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">Asal-usul: <span class="text-rose-500">*</span></label>
+                            <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                                @foreach (['Hasil Operasi', 'Hasil Penyerahan', 'Hasil Penyelamatan', 'Hasil Tegahan'] as $asalUsulC11)
+                                    <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="asal_usul_c11" value="{{ $asalUsulC11 }}" x-bind:required="adaDataSitaanC11 === 'ya'" class="text-forest-600 focus:ring-forest-600"><span class="text-xs font-medium text-slate-700">{{ $asalUsulC11 }}</span></label>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            @foreach ([['jantan_c11', 'Jantan'], ['betina_c11', 'Betina'], ['belum_diketahui_c11', 'Belum Diketahui']] as [$fieldJumlahC11, $labelJumlahC11])
+                                <div><label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelJumlahC11 }}: <span class="text-rose-500">*</span></label><input type="number" min="0" name="{{ $fieldJumlahC11 }}" x-bind:required="adaDataSitaanC11 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            @endforeach
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c11" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.12'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c12" x-bind:required="selectedSubBidangKode === 'C.12'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c12" x-bind:required="selectedSubBidangKode === 'C.12'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c12" x-bind:required="selectedSubBidangKode === 'C.12'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada PNB dari kegiatan pemanfaatan TSL pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada penerimaan PNBP pemanfaatan TSL</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_pnb_tsl_c12" value="ya" x-model="adaPnbTslC12" x-bind:required="selectedSubBidangKode === 'C.12'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_pnb_tsl_c12" value="tidak" x-model="adaPnbTslC12" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaPnbTslC12 === 'ya'" x-transition class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Akun PNB: <span class="text-rose-500">*</span></label>
+                            <select name="akun_pnb_c12" x-bind:required="adaPnbTslC12 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih Akun PNB</option>
+                                <option value="PNBP Pemanfaatan TSL">PNBP Pemanfaatan TSL</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="max-w-md">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Realisasi: <span class="text-rose-500">*</span></label>
+                            <div class="flex items-center overflow-hidden rounded-xl border border-slate-300 bg-slate-50">
+                                <span class="border-r border-slate-300 px-3 py-3 text-xs text-slate-500">Rp</span>
+                                <input type="number" min="0" step="1" name="realisasi_pnb_c12" x-bind:required="adaPnbTslC12 === 'ya'" class="w-full bg-transparent p-3 text-xs text-slate-800 focus:outline-none">
+                                <span class="border-l border-slate-300 px-3 py-3 text-xs text-slate-500">,00</span>
+                            </div>
+                        </div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c12" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.14'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c14" x-bind:required="selectedSubBidangKode === 'C.14'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c14" x-bind:required="selectedSubBidangKode === 'C.14'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c14" x-bind:required="selectedSubBidangKode === 'C.14'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada kejadian Interaksi Negatif Satwa Liar dan Manusia pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada kejadian Interaksi Negatif Satwa Liar dan Manusia</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_interaksi_negatif_c14" value="ya" x-model="adaInteraksiNegatifC14" x-bind:required="selectedSubBidangKode === 'C.14'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_interaksi_negatif_c14" value="tidak" x-model="adaInteraksiNegatifC14" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaInteraksiNegatifC14 === 'ya'" x-transition x-init="$watch('adaInteraksiNegatifC14', value => { if (value === 'ya') $nextTick(() => window.initC14Map()) })" class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang terlibat Interaksi Negatif: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c14" x-model="spesiesInteraksiC14" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesInteraksiC14 === 'Lainnya'" type="text" name="spesies_lainnya_c14" x-bind:required="adaInteraksiNegatifC14 === 'ya' && spesiesInteraksiC14 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Kejadian: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_kejadian_c14" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Jml Individu: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="1" name="jumlah_individu_c14" value="1" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">indv.</span></div></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Apakah Satwa Mati?</label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="satwa_mati_c14" value="0" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">indv.</span></div></div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK/LOKASI GEOGRAFIS KEJADIAN (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c14" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">X</span><input id="latitude-c14" type="number" step="any" name="latitude_c14" placeholder="-0.897123" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">Y</span><input id="longitude-c14" type="number" step="any" name="longitude_c14" placeholder="119.87123" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <fieldset class="rounded-xl border border-slate-200 p-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-500">Korban Manusia</legend>
+                                <div class="grid grid-cols-2 gap-4">
+                                    @foreach ([['meninggal_c14', 'Meninggal', 'org'], ['cedera_c14', 'Cedera', 'org']] as [$fieldKorbanC14, $labelKorbanC14, $unitKorbanC14])
+                                        <div><label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelKorbanC14 }}: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="{{ $fieldKorbanC14 }}" value="0" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">{{ $unitKorbanC14 }}</span></div></div>
+                                    @endforeach
+                                </div>
+                            </fieldset>
+                            <fieldset class="rounded-xl border border-slate-200 p-4">
+                                <legend class="px-2 text-xs font-extrabold text-slate-500">Kerusakan Kebun/Lahan &amp; Bangunan</legend>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Kebun/Lahan: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" step="any" name="kerusakan_kebun_c14" value="0" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">m²</span></div></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">Bangunan: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="kerusakan_bangunan_c14" value="0" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">unit</span></div></div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-500">Korban Hewan Ternak</legend>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                @foreach ([['kambing_c14', 'Kambing'], ['sapi_c14', 'Sapi'], ['kerbau_c14', 'Kerbau'], ['anjing_c14', 'Anjing'], ['babi_c14', 'Babi'], ['unggas_c14', 'Unggas']] as [$fieldTernakC14, $labelTernakC14])
+                                    <div><label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelTernakC14 }}: <span class="text-rose-500">*</span></label><div class="flex items-center rounded-xl border border-slate-300 bg-slate-50"><input type="number" min="0" name="{{ $fieldTernakC14 }}" value="0" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 text-xs text-slate-500">indv.</span></div></div>
+                                @endforeach
+                            </div>
+                        </fieldset>
+                        <div class="max-w-md"><label class="block text-xs font-bold text-slate-700 mb-1">Taksiran Kerugian: <span class="text-rose-500">*</span></label><div class="flex items-center overflow-hidden rounded-xl border border-slate-300 bg-slate-50"><span class="border-r border-slate-300 px-3 py-3 text-xs text-slate-500">Rp</span><input type="number" min="0" step="1" name="taksiran_kerugian_c14" x-bind:required="adaInteraksiNegatifC14 === 'ya'" class="w-full bg-transparent p-3 text-xs text-slate-800 focus:outline-none"><span class="border-l border-slate-300 px-3 py-3 text-xs text-slate-500">,00</span></div></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Upaya Penanggulangan:</label><textarea name="upaya_penanggulangan_c14" rows="4" placeholder="Upaya penanggulangan yang telah dan akan dilakukan.." class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c14" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.01'" x-transition class="space-y-6 pt-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c01" x-bind:required="selectedSubBidangKode === 'C.01'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Temuan Perjumpaan Spesies pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada kegiatan/temuan perjumpaan spesies</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="temuan_perjumpaan_spesies_c01" value="ya" x-model="temuanPerjumpaanSpesiesC01" x-bind:required="selectedSubBidangKode === 'C.01'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="temuan_perjumpaan_spesies_c01" value="tidak" x-model="temuanPerjumpaanSpesiesC01" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="temuanPerjumpaanSpesiesC01 === 'ya'" x-transition x-init="$watch('temuanPerjumpaanSpesiesC01', value => { if (value === 'ya') $nextTick(() => window.initC01Map()) })" class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang dijumpai: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c01" x-model="spesiesC01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                <option>Babirusa</option><option>Maleo</option><option>Anoa</option>
+                                <option>Yaki (Monyet Sulawesi)</option><option>Tarsius</option><option>Rangkong Sulawesi</option>
+                                <option>Kuskus</option><option>Buaya muara</option><option>Anggrek alam</option><option>Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesC01 === 'Lainnya'" type="text" name="spesies_lainnya_c01" x-model="spesiesLainnyaC01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya' && spesiesC01 === 'Lainnya'" placeholder="Tuliskan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Jml Ind. yang dijumpai: <span class="text-rose-500">*</span></label><input type="number" min="1" name="jumlah_individu_c01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                            <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perjumpaan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perjumpaan_c01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK GEOGRAFIS PERJUMPAAN SPESIES (XY): <span class="text-rose-500">*</span></legend>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">X</span><input id="latitude-c01" type="number" step="any" name="latitude_c01" placeholder="-0.897123" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="px-3 py-3 border-r border-slate-200 text-xs text-slate-500">Y</span><input id="longitude-c01" type="number" step="any" name="longitude_c01" placeholder="119.87123" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                            <div id="map-c01" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                        </fieldset>
+                        <fieldset class="rounded-xl border border-slate-200 p-4 md:p-6">
+                            <legend class="px-2 text-xs font-extrabold uppercase text-slate-800">Kategori Perjumpaan Spesies (XY): <span class="text-rose-500">*</span></legend>
+                            @foreach ($kategoriPerjumpaanC01 as $kelompokKategori => $opsiKategori)
+                                <div class="mb-5 last:mb-0">
+                                    <h4 class="mb-2 text-xs font-semibold text-slate-500">{{ $kelompokKategori }}</h4>
+                                    <div class="space-y-2">
+                                        @foreach ($opsiKategori as [$namaKategori, $jumlahKategori])
+                                            <label class="flex items-center justify-between gap-4 rounded-md px-2 py-1 text-xs text-slate-700 hover:bg-slate-50">
+                                                <span class="flex items-center gap-3"><input type="radio" name="kategori_perjumpaan_c01" value="{{ $namaKategori }}" x-model="kategoriPerjumpaanC01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'ya'" class="text-forest-600 focus:ring-forest-600"><span>{{ $namaKategori }}</span></span>
+                                                <span class="shrink-0 text-slate-600">{{ $jumlahKategori }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c01" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
+                    </div>
+                    <div x-cloak x-show="temuanPerjumpaanSpesiesC01 === 'tidak'" x-transition class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'tidak'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c01" x-bind:required="temuanPerjumpaanSpesiesC01 === 'tidak'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG B.01: Kelompok Binaan                             -->
                 <!-- ========================================================================= -->
@@ -2398,7 +3334,7 @@
 
                 </div>
 
-                <div>
+                <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14'">
                     <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan:</label>
                     <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-forest-600 outline-none text-xs font-medium"></textarea>
                 </div>
@@ -2422,6 +3358,217 @@
 
     <!-- Script AJAX Sub-Bidang & Wilayah Indonesia -->
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.setTimeout(() => {
+        window.initC01Map = function() {
+            const mapElement = document.getElementById('map-c01');
+            if (!mapElement || !window.L) return;
+
+            if (window.c01Map) {
+                window.c01Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c01');
+            const longitudeInput = document.getElementById('longitude-c01');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c01Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c01Map);
+
+            let marker = null;
+            window.c01Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c01Map);
+            });
+
+            window.setTimeout(() => window.c01Map.invalidateSize(), 100);
+        };
+
+        window.initC02Map = function() {
+            const mapElement = document.getElementById('map-c02');
+            if (!mapElement || !window.L) return;
+
+            if (window.c02Map) {
+                window.c02Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c02');
+            const longitudeInput = document.getElementById('longitude-c02');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c02Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c02Map);
+
+            let marker = null;
+            window.c02Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c02Map);
+            });
+
+            window.setTimeout(() => window.c02Map.invalidateSize(), 100);
+        };
+
+        window.initC04Map = function() {
+            const mapElement = document.getElementById('map-c04');
+            if (!mapElement || !window.L) return;
+
+            if (window.c04Map) {
+                window.c04Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c04');
+            const longitudeInput = document.getElementById('longitude-c04');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c04Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c04Map);
+
+            let marker = null;
+            window.c04Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c04Map);
+            });
+
+            window.setTimeout(() => window.c04Map.invalidateSize(), 100);
+        };
+
+        window.initC06Map = function() {
+            const mapElement = document.getElementById('map-c06');
+            if (!mapElement || !window.L) return;
+
+            if (window.c06Map) {
+                window.c06Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c06');
+            const longitudeInput = document.getElementById('longitude-c06');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c06Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c06Map);
+
+            let marker = null;
+            window.c06Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c06Map);
+            });
+
+            window.setTimeout(() => window.c06Map.invalidateSize(), 100);
+        };
+
+        window.initC14Map = function() {
+            const mapElement = document.getElementById('map-c14');
+            if (!mapElement || !window.L) return;
+
+            if (window.c14Map) {
+                window.c14Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c14');
+            const longitudeInput = document.getElementById('longitude-c14');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c14Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c14Map);
+
+            let marker = null;
+            window.c14Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c14Map);
+            });
+
+            window.setTimeout(() => window.c14Map.invalidateSize(), 100);
+        };
+
+        const conservationForm = document.querySelector('form');
+        const disabledBeforePanelHidden = new WeakMap();
+
+        function syncHiddenPanelControls() {
+            conservationForm.querySelectorAll('input, select, textarea, button').forEach(control => {
+                let ancestor = control.parentElement;
+                let panelHidden = false;
+
+                while (ancestor && ancestor !== conservationForm) {
+                    if (ancestor.hasAttribute('x-cloak') || (ancestor.hasAttribute('x-show') && getComputedStyle(ancestor).display === 'none')) {
+                        panelHidden = true;
+                        break;
+                    }
+                    ancestor = ancestor.parentElement;
+                }
+
+                if (panelHidden) {
+                    if (!disabledBeforePanelHidden.has(control)) {
+                        disabledBeforePanelHidden.set(control, control.disabled);
+                    }
+                    control.disabled = true;
+                } else if (disabledBeforePanelHidden.has(control)) {
+                    control.disabled = disabledBeforePanelHidden.get(control);
+                    disabledBeforePanelHidden.delete(control);
+                }
+            });
+        }
+
+        const hiddenPanelObserver = new MutationObserver(syncHiddenPanelControls);
+        conservationForm.querySelectorAll('[x-show], [x-cloak]').forEach(panel => {
+            hiddenPanelObserver.observe(panel, { attributes: true, attributeFilter: ['style', 'x-cloak'] });
+        });
+        syncHiddenPanelControls();
+
         // --- 1. SCRIPT FOR SUB-BIDANG ---
         document.getElementById('bidang_select').addEventListener('change', function() {
             let bidangId = this.value;
@@ -2480,6 +3627,7 @@
 
         // --- 2. SCRIPT FOR DROPDOWN WILAYAH INDONESIA (BERTINGKAT) ---
         const provSelect = document.getElementById('provinsi_select');
+        const provSelectC08 = document.getElementById('provinsi_c08');
         const kabSelect = document.getElementById('kabupaten_select');
         const kecSelect = document.getElementById('kecamatan_select');
         const desaSelect = document.getElementById('desa_select');
@@ -2493,6 +3641,12 @@
                     provinces.forEach(p => {
                         provSelect.innerHTML += `<option value="${p.name}" data-id="${p.id}">${p.name}</option>`;
                     });
+                    if (provSelectC08) {
+                        provSelectC08.innerHTML = '<option value="">Pilih provinsi</option>';
+                        provinces.forEach(p => {
+                            provSelectC08.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+                        });
+                    }
                 })
                 .catch(err => console.error('Error fetching provinces:', err));
 
@@ -2565,6 +3719,8 @@
                 }
             });
         }
+            }, 0);
+        });
     </script>
 </body>
 </html>
