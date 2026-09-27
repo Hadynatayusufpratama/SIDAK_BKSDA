@@ -124,11 +124,6 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
-    </footer>
-
     <!-- Leaflet Map Logic -->
     <script>
         // 1. Inisialisasi Peta Fokus Langsung ke Sulawesi Tengah (Zoom Level 7)

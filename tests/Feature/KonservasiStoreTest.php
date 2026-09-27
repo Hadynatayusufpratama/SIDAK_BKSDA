@@ -15,6 +15,53 @@ class KonservasiStoreTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_create_page_uses_named_sub_bidang_route_and_shows_validation_errors(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $subBidangUrl = route('konservasi.sub-bidang', ['bidang_id' => '__BIDANG_ID__']);
+
+        $this->actingAs($user)
+            ->get(route('konservasi.create'))
+            ->assertOk()
+            ->assertSee($subBidangUrl, false)
+            ->assertDontSee('name="keterangan"', false);
+
+        $this->from(route('konservasi.create'))
+            ->actingAs($user)
+            ->post(route('konservasi.store'), [])
+            ->assertRedirect(route('konservasi.create'));
+
+        $this->get(route('konservasi.create'))
+            ->assertOk()
+            ->assertSee('Data belum tersimpan. Periksa kembali isian berikut:')
+            ->assertSee('sub bidang id field is required');
+    }
+
+    public function test_oversized_sk_parsial_file_shows_limit_and_does_not_save_record(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $bidang = Bidang::create(['nama_bidang' => 'Perencanaan Konservasi']);
+        $subBidang = SubBidang::create([
+            'bidang_id' => $bidang->id,
+            'kode_sub' => 'A.01',
+            'nama_sub_bidang' => 'Kawasan Konservasi',
+        ]);
+
+        $this->actingAs($user)
+            ->from(route('konservasi.create'))
+            ->post(route('konservasi.store'), [
+                'sub_bidang_id' => $subBidang->id,
+                'sk_parsial_file' => UploadedFile::fake()->create('sk-parsial.pdf', 2500, 'application/pdf'),
+            ])
+            ->assertRedirect(route('konservasi.create'));
+
+        $this->get(route('konservasi.create'))
+            ->assertOk()
+            ->assertSee('Ukuran file SK parsial maksimal 2 MB.');
+
+        $this->assertDatabaseCount('data_konservasi', 0);
+    }
+
     public function test_b01_form_values_are_saved_for_the_rekapitulasi(): void
     {
         $user = User::factory()->create(['email_verified_at' => now()]);
@@ -61,7 +108,10 @@ class KonservasiStoreTest extends TestCase
         $this->assertStringContainsString('Keterangan: Pendampingan tahap kedua', $record->keterangan);
 
         $this->actingAs($user)
-            ->get(route('konservasi.index'))
+            ->get(route('konservasi.index', [
+                'bidang' => 'konservasi_kawasan',
+                'sub_bidang' => 'B.01',
+            ]))
             ->assertOk()
             ->assertSee('Tahun: 2025')
             ->assertSee('Nama Kelompok: Kelompok Hutan Lestari')
@@ -336,7 +386,11 @@ class KonservasiStoreTest extends TestCase
             ->assertSee('Data Sub-Bidang B.01')
             ->assertSee('value="Kelompok Lama"', false)
             ->assertSee('value="Semester I"', false)
-            ->assertSee('value="Catatan lama"', false);
+            ->assertDontSee('Waktu & Koordinat Spasial')
+            ->assertDontSee('Keterangan Tambahan')
+            ->assertDontSee('name="latitude"', false)
+            ->assertDontSee('name="longitude"', false)
+            ->assertDontSee('name="bulan"', false);
 
         $this->actingAs($user)
             ->put(route('konservasi.update', $record->id), [
@@ -348,17 +402,18 @@ class KonservasiStoreTest extends TestCase
                 'nama_kelompok' => 'Kelompok Baru',
                 'jumlah_laki' => '6',
                 'jumlah_perempuan' => '4',
-                'keterangan' => 'Catatan baru',
-                'bulan' => '4',
             ])
             ->assertRedirect(route('konservasi.index'));
 
         $record->refresh();
         $this->assertSame(2026, $record->tahun);
         $this->assertSame(10, $record->jumlah);
+        $this->assertSame(3, $record->bulan);
+        $this->assertSame('-0.89', $record->latitude);
+        $this->assertSame('119.87', $record->longitude);
         $this->assertStringContainsString('Nama Kelompok: Kelompok Baru', $record->keterangan);
         $this->assertStringContainsString('Periode Semester: Semester II', $record->keterangan);
-        $this->assertStringContainsString('Keterangan: Catatan baru', $record->keterangan);
+        $this->assertStringContainsString('Keterangan: Catatan lama', $record->keterangan);
     }
 
 }

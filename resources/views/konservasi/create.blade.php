@@ -157,6 +157,17 @@
             </div>
         @endif
 
+        @if ($errors->any())
+            <div role="alert" class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl shadow-sm">
+                <p class="text-xs font-bold">Data belum tersimpan. Periksa kembali isian berikut:</p>
+                <ul class="mt-2 list-disc list-inside text-xs space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- CARD CONTAINER FORM -->
         <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm"
              x-data="{ 
@@ -171,33 +182,6 @@
                  ketersediaanZonasi: 'sudah',
                  adaPengesahanD03: '',
                  adaKegiatanB01: 'ya',
-                 adaDataLembagaC02: '',
-                 bentukLembagaC02: '',
-                 bentukLembagaUmumC02: ['Kebun Binatang', 'Taman Safari', 'Taman Satwa', 'Taman Satwa Khusus', 'Museum Zoologi', 'Kebun Botani', 'Taman Tumbuhan Khusus', 'Herbarium'],
-                 adaDataKoleksiC03: '',
-                 spesiesKoleksiC03: '',
-                 adaDataPenangkaranC04: '',
-                 adaDataJenisTslC05: '',
-                 spesiesDitangkarkanC05: '',
-                 adaDataPengedarC06: '',
-                 adaRealisasiPengambilanC08: '',
-                 tampilkanKuotaTangkapC08: false,
-                 adaRealisasiEksporC09: '',
-                 adaRealisasiEksporC10: '',
-                 adaDataSitaanC11: '',
-                 adaPnbTslC12: '',
-                 adaInteraksiNegatifC14: '',
-                 spesiesInteraksiC14: '',
-                 temuanPerjumpaanSpesiesC01: '',
-                 kategoriPerjumpaanC01: '',
-                 spesiesC01: '',
-                 spesiesLainnyaC01: '',
-                 adaDataOdtwaBaru: '',
-                 adaPenerbitanIzinPbp: '',
-                 adaSaranaPrasaranaD07: '',
-                 dataTersediaD08: '',
-                 adaPotensiAirD09: '',
-                 dataTersediaD10D16: '',
                  palBaik: 0,
                  palRusak: 0,
                  palHilang: 0,
@@ -3334,9 +3318,10 @@
 
                 </div>
 
-                <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14'">
-                    <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan:</label>
-                    <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-forest-600 outline-none text-xs font-medium"></textarea>
+                <!-- KETERANGAN GLOBAL -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label>
+                    <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:bg-white text-xs font-medium shadow-xs"></textarea>
                 </div>
 
                 <!-- Action Button -->
@@ -3352,7 +3337,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-auto border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
+    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
         <p>&copy; 2026 <strong>SIDAK BKSDA Sulawesi Tengah</strong>. All rights reserved.</p>
     </footer>
 
@@ -3570,6 +3555,8 @@
         syncHiddenPanelControls();
 
         // --- 1. SCRIPT FOR SUB-BIDANG ---
+        const subBidangUrlTemplate = @json(route('konservasi.sub-bidang', ['bidang_id' => '__BIDANG_ID__']), JSON_UNESCAPED_SLASHES);
+
         document.getElementById('bidang_select').addEventListener('change', function() {
             let bidangId = this.value;
             let subSelect = document.getElementById('sub_bidang_select');
@@ -3582,7 +3569,8 @@
             subSelect.disabled = true;
 
             if (bidangId) {
-                fetch('/get-sub-bidang/' + bidangId)
+                const subBidangUrl = subBidangUrlTemplate.replace('__BIDANG_ID__', encodeURIComponent(bidangId));
+                fetch(subBidangUrl)
                     .then(response => response.json())
                     .then(data => {
                         subSelect.innerHTML = '<option value="">-- Pilih Sub-Bidang Kategori --</option>';
@@ -3719,8 +3707,6 @@
                 }
             });
         }
-            }, 0);
-        });
     </script>
 </body>
 </html>
