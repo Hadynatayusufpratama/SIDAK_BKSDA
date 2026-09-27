@@ -278,7 +278,85 @@ class KonservasiController extends Controller
     public function create()
     {
         $bidang = Bidang::all();
+<<<<<<< HEAD
         return view('konservasi.create', compact('bidang'));
+=======
+        $fieldsC02 = $this->fieldsBySubBidang()['C.02'];
+        $lembagaQuery = DataKonservasi::with('subBidang')
+            ->whereHas('subBidang', fn ($query) => $query->where('kode_sub', 'C.02'));
+
+        if (Schema::hasColumn('data_konservasi', 'user_id')) {
+            $lembagaQuery->where('user_id', auth()->id());
+        }
+
+        $lembagaKonservasiList = $lembagaQuery->latest()->get()
+            ->map(fn ($record) => $this->parseDetailValues($record->keterangan, $fieldsC02)['nama_lembaga_c02'] ?? null)
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+        $fieldsC04 = $this->fieldsBySubBidang()['C.04'];
+        $penangkarQuery = DataKonservasi::with('subBidang')
+            ->whereHas('subBidang', fn ($query) => $query->where('kode_sub', 'C.04'));
+
+        if (Schema::hasColumn('data_konservasi', 'user_id')) {
+            $penangkarQuery->where('user_id', auth()->id());
+        }
+
+        $penangkarList = $penangkarQuery->latest()->get()
+            ->map(fn ($record) => $this->parseDetailValues($record->keterangan, $fieldsC04)['nama_penangkar_c04'] ?? null)
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+        $fieldsC06 = $this->fieldsBySubBidang()['C.06'];
+        $pengedarQuery = DataKonservasi::with('subBidang')
+            ->whereHas('subBidang', fn ($query) => $query->where('kode_sub', 'C.06'));
+
+        if (Schema::hasColumn('data_konservasi', 'user_id')) {
+            $pengedarQuery->where('user_id', auth()->id());
+        }
+
+        $pengedarList = $pengedarQuery->latest()->get()
+            ->map(fn ($record) => $this->parseDetailValues($record->keterangan, $fieldsC06)['nama_pengedar_c06'] ?? null)
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+        $spesiesKoleksiC03 = [
+            'Anoa dataran rendah', 'Anoa pegunungan', 'Babirusa', 'Maleo',
+            'Yaki (Monyet hitam Sulawesi)', 'Tarsius', 'Kuskus beruang',
+            'Kuskus kerdil', 'Rangkong Sulawesi', 'Kakatua kecil jambul kuning',
+        ];
+        $negaraTujuanC09 = [
+            'Australia', 'Belanda', 'Hong Kong', 'Jepang', 'Jerman', 'Korea Selatan',
+            'Malaysia', 'Singapura', 'Thailand', 'Tiongkok', 'Amerika Serikat', 'Lainnya',
+        ];
+        $kawasanKonservasi = collect([
+            'TWA Wera',
+            'SM Tanjung Santigi',
+            'CA Tanjung Api',
+            'TWA Pulau Tokobae',
+            'TWA Pulau Pasoso',
+            'SM Pulau Dolangan',
+            'SM Pinjan Tanjung Matop',
+            'SM Pati-Pati',
+            'CA Pangi Binangga',
+            'CA Pamona',
+            'CA Morowali',
+            'SM Lombuyan',
+            'TB Landusa Tomata',
+            'CA Gunung Tinombala',
+            'CA Gunung Sojol',
+            'CA Gunung Dako',
+            'TWA Bancea',
+            'SM Bakiriang',
+        ])->map(fn ($nama) => [
+            'nama' => $nama . ' (Satker: Balai KSDA Sulawesi Tengah)',
+        ])->all();
+
+        return view('konservasi.create', compact('bidang', 'kawasanKonservasi', 'lembagaKonservasiList', 'spesiesKoleksiC03', 'penangkarList', 'pengedarList', 'negaraTujuanC09'));
+>>>>>>> 9000433 (pesan commit)
     }
 
     // Mengambil Sub-Bidang Berdasarkan Bidang ID untuk Dropdown Dinamis
@@ -298,7 +376,22 @@ class KonservasiController extends Controller
             'A.05' => ['tahun_ekosistem', 'kawasan_nama_ekosistem', 'ketersediaan_ekosistem', 'shapefile_ekosistem_zip'],
             'A.06' => ['tahun_zonasi', 'kawasan_nama_zonasi', 'ketersediaan_zonasi', 'nomor_sk_zonasi', 'tanggal_sk_zonasi', 'file_sk_zonasi', 'shapefile_zonasi_zip'],
             'B.01' => ['tahun_b01', 'periode_semester', 'kawasan_nama_b01', 'ada_kegiatan_b01', 'nama_kelompok', 'jumlah_laki', 'jumlah_perempuan', 'provinsi', 'kabupaten', 'kecamatan', 'desa', 'hhbk_nihil', 'jenis_hhbk', 'pertanian_nihil', 'jenis_pertanian', 'perkebunan_nihil', 'jenis_perkebunan', 'peternakan_nihil', 'jenis_peternakan', 'perikanan_nihil', 'jenis_perikanan', 'wisata_nihil', 'jenis_wisata', 'produk_nihil', 'jenis_produk', 'pembibitan_nihil', 'jenis_pembibitan', 'lainnya_nihil', 'jenis_lainnya', 'jenis_bantuan', 'jumlah_bantuan', 'sumber_dana'],
+<<<<<<< HEAD
             'B.02' => ['tahun_b02', 'kawasan_nama_b02', 'ada_akses_b02', 'jenis_pengelolaan_b02', 'jenis_akses_b02', 'jenis_dimanfaatkan_b02', 'nama_kelompok_b02', 'masyarakat_hukum_adat_b02', 'jumlah_laki_b02', 'jumlah_perempuan_b02', 'kabupaten_b02', 'kecamatan_b02', 'desa_b02', 'nomor_surat_dirjen_b02', 'nomor_pks_b02', 'tanggal_mulai_ks_b02', 'tanggal_akhir_pks_b02', 'luas_area_b02', 'zona_blok_b02', 'dokumen_kerjasama_b02', 'shapefile_kerjasama_b02'],
+=======
+            'C.01' => ['satuan_kerja_c01', 'temuan_perjumpaan_spesies_c01', 'tahun_c01', 'bulan_c01', 'spesies_c01', 'spesies_lainnya_c01', 'jumlah_individu_c01', 'tanggal_perjumpaan_c01', 'latitude_c01', 'longitude_c01', 'kategori_perjumpaan_c01', 'keterangan_c01'],
+            'C.02' => ['tahun_c02', 'satuan_kerja_c02', 'ada_data_lembaga_c02', 'nama_lembaga_c02', 'bentuk_lembaga_c02', 'latitude_c02', 'longitude_c02', 'alamat_lembaga_c02', 'nomor_dokumen_perizinan_c02', 'luas_areal_c02', 'tanggal_perizinan_c02', 'tanggal_berakhir_izin_c02', 'dokumen_perizinan_c02', 'keterangan_c02'],
+            'C.03' => ['tahun_c03', 'periode_semester_c03', 'satuan_kerja_c03', 'ada_data_koleksi_c03', 'lembaga_konservasi_c03', 'spesies_koleksi_c03', 'nama_spesies_lainnya_c03', 'jantan_c03', 'betina_c03', 'belum_diketahui_c03', 'keterangan_c03'],
+            'C.04' => ['tahun_c04', 'satuan_kerja_c04', 'ada_data_penangkaran_c04', 'nama_penangkar_c04', 'latitude_c04', 'longitude_c04', 'alamat_penangkaran_c04', 'lokasi_unit_penangkaran_c04', 'nomor_dokumen_perizinan_c04', 'luas_areal_c04', 'tanggal_perizinan_c04', 'tanggal_berakhir_izin_c04', 'dokumen_perizinan_c04', 'keterangan_c04'],
+            'C.05' => ['tahun_c05', 'satuan_kerja_c05', 'ada_data_jenis_tsl_c05', 'penangkar_c05', 'spesies_ditangkar_c05', 'nama_spesies_lainnya_c05', 'jumlah_indukan_c05', 'hasil_penangkaran_c05', 'hasil_pemanfaatan_tahun_ini_c05', 'sisa_stok_hasil_pemanfaatan_c05', 'keterangan_c05'],
+            'C.06' => ['tahun_c06', 'satuan_kerja_c06', 'ada_data_pengedar_c06', 'nama_pengedar_c06', 'kategori_pengedar_c06', 'latitude_c06', 'longitude_c06', 'lokasi_unit_pengedar_c06', 'nomor_dokumen_perizinan_c06', 'luas_areal_c06', 'tanggal_perizinan_c06', 'tanggal_berakhir_izin_c06', 'dokumen_perizinan_c06', 'spesies_diedarkan_c06', 'keterangan_c06'],
+            'C.08' => ['tahun_c08', 'periode_triwulan_c08', 'satuan_kerja_c08', 'ada_realisasi_pengambilan_c08', 'nama_spesies_c08', 'jenis_tsl_c08', 'provinsi_c08', 'realisasi_volume_c08', 'realisasi_satuan_c08', 'keterangan_c08'],
+            'C.09' => ['tahun_c09', 'periode_triwulan_c09', 'satuan_kerja_c09', 'ada_realisasi_ekspor_c09', 'penangkar_c09', 'nama_spesies_c09', 'jenis_tsl_c09', 'negara_tujuan_c09', 'realisasi_ekspor_volume_c09', 'realisasi_ekspor_satuan_c09', 'keterangan_c09'],
+            'C.10' => ['tahun_c10', 'periode_triwulan_c10', 'satuan_kerja_c10', 'ada_realisasi_ekspor_c10', 'pengedar_c10', 'nama_spesies_c10', 'jenis_tsl_c10', 'negara_tujuan_c10', 'realisasi_ekspor_volume_c10', 'realisasi_ekspor_satuan_c10', 'keterangan_c10'],
+            'C.11' => ['tahun_c11', 'bulan_c11', 'satuan_kerja_c11', 'ada_data_sitaan_c11', 'spesies_c11', 'asal_usul_c11', 'jantan_c11', 'betina_c11', 'belum_diketahui_c11', 'keterangan_c11'],
+            'C.12' => ['tahun_c12', 'bulan_c12', 'satuan_kerja_c12', 'ada_pnb_tsl_c12', 'akun_pnb_c12', 'realisasi_pnb_c12', 'keterangan_c12'],
+            'C.14' => ['tahun_c14', 'bulan_c14', 'satuan_kerja_c14', 'ada_interaksi_negatif_c14', 'spesies_c14', 'spesies_lainnya_c14', 'tanggal_kejadian_c14', 'jumlah_individu_c14', 'satwa_mati_c14', 'latitude_c14', 'longitude_c14', 'meninggal_c14', 'cedera_c14', 'kerusakan_kebun_c14', 'kerusakan_bangunan_c14', 'kambing_c14', 'sapi_c14', 'kerbau_c14', 'anjing_c14', 'babi_c14', 'unggas_c14', 'taksiran_kerugian_c14', 'upaya_penanggulangan_c14', 'keterangan_c14'],
+>>>>>>> 9000433 (pesan commit)
         ];
     }
 
@@ -325,6 +418,76 @@ class KonservasiController extends Controller
             'jenis_peternakan' => 'Peternakan', 'jenis_perikanan' => 'Perikanan',
             'jenis_wisata' => 'Jasa Wisata', 'jenis_produk' => 'Usaha Penghasil Produk',
             'jenis_pembibitan' => 'Pembibitan', 'jenis_lainnya' => 'Jenis Usaha Lainnya',
+            'satuan_kerja_c01' => 'Satuan Kerja', 'temuan_perjumpaan_spesies_c01' => 'Temuan Perjumpaan Spesies',
+            'tahun_c01' => 'Tahun', 'bulan_c01' => 'Periode Bulan',
+            'tahun_c02' => 'Tahun', 'satuan_kerja_c02' => 'Satuan Kerja', 'ada_data_lembaga_c02' => 'Ada Data Lembaga Konservasi',
+            'tahun_c03' => 'Tahun', 'periode_semester_c03' => 'Periode Semester',
+            'satuan_kerja_c03' => 'Satuan Kerja', 'ada_data_koleksi_c03' => 'Ada Data Koleksi TSL',
+            'tahun_c04' => 'Tahun', 'satuan_kerja_c04' => 'Satuan Kerja', 'ada_data_penangkaran_c04' => 'Ada Data Penangkaran',
+            'nama_penangkar_c04' => 'Nama Penangkar', 'latitude_c04' => 'Koordinat X', 'longitude_c04' => 'Koordinat Y',
+            'alamat_penangkaran_c04' => 'Alamat Penangkaran', 'lokasi_unit_penangkaran_c04' => 'Lokasi Unit Penangkaran',
+            'nomor_dokumen_perizinan_c04' => 'Nomor Dokumen Perizinan', 'luas_areal_c04' => 'Luas Areal',
+            'tanggal_perizinan_c04' => 'Tanggal Perizinan', 'tanggal_berakhir_izin_c04' => 'Tanggal Berakhir Izin',
+            'keterangan_c04' => 'Keterangan',
+            'tahun_c05' => 'Tahun', 'satuan_kerja_c05' => 'Satuan Kerja', 'ada_data_jenis_tsl_c05' => 'Ada Jenis TSL yang Ditangkarkan',
+            'penangkar_c05' => 'Nama Penangkar', 'spesies_ditangkar_c05' => 'Spesies yang Ditangkarkan',
+            'nama_spesies_lainnya_c05' => 'Nama Spesies Lainnya', 'jumlah_indukan_c05' => 'Jumlah Indukan',
+            'hasil_penangkaran_c05' => 'Hasil Penangkaran', 'hasil_pemanfaatan_tahun_ini_c05' => 'Hasil Pemanfaatan Tahun Ini',
+            'sisa_stok_hasil_pemanfaatan_c05' => 'Sisa Stok Hasil Pemanfaatan', 'keterangan_c05' => 'Keterangan',
+            'tahun_c06' => 'Tahun', 'satuan_kerja_c06' => 'Satuan Kerja', 'ada_data_pengedar_c06' => 'Ada Data Pengedar TSL',
+            'nama_pengedar_c06' => 'Nama Pengedar TSL', 'kategori_pengedar_c06' => 'Kategori Pengedar',
+            'latitude_c06' => 'Koordinat X', 'longitude_c06' => 'Koordinat Y', 'lokasi_unit_pengedar_c06' => 'Lokasi Unit Pengedar TSL',
+            'nomor_dokumen_perizinan_c06' => 'Nomor Dokumen Perizinan', 'luas_areal_c06' => 'Luas Areal',
+            'tanggal_perizinan_c06' => 'Tanggal Perizinan', 'tanggal_berakhir_izin_c06' => 'Tanggal Berakhir Izin',
+            'spesies_diedarkan_c06' => 'Spesies yang Diedarkan', 'keterangan_c06' => 'Keterangan',
+            'tahun_c08' => 'Tahun', 'periode_triwulan_c08' => 'Periode Triwulan',
+            'satuan_kerja_c08' => 'Satuan Kerja', 'ada_realisasi_pengambilan_c08' => 'Ada Realisasi Pengambilan/Penangkapan TSL',
+            'nama_spesies_c08' => 'Nama Species', 'jenis_tsl_c08' => 'Jenis', 'provinsi_c08' => 'Provinsi',
+            'realisasi_volume_c08' => 'Realisasi Tangkap Volume', 'realisasi_satuan_c08' => 'Realisasi Tangkap Satuan',
+            'keterangan_c08' => 'Keterangan',
+            'tahun_c09' => 'Tahun', 'periode_triwulan_c09' => 'Periode Triwulan',
+            'satuan_kerja_c09' => 'Satuan Kerja', 'ada_realisasi_ekspor_c09' => 'Ada Realisasi Ekspor TSL Penangkaran',
+            'penangkar_c09' => 'Nama Penangkar', 'nama_spesies_c09' => 'Nama Spesies',
+            'jenis_tsl_c09' => 'Jenis', 'negara_tujuan_c09' => 'Negara Tujuan',
+            'realisasi_ekspor_volume_c09' => 'Realisasi Ekspor Volume', 'realisasi_ekspor_satuan_c09' => 'Realisasi Ekspor Satuan',
+            'keterangan_c09' => 'Keterangan',
+            'tahun_c10' => 'Tahun', 'periode_triwulan_c10' => 'Periode Triwulan',
+            'satuan_kerja_c10' => 'Satuan Kerja', 'ada_realisasi_ekspor_c10' => 'Ada Realisasi Ekspor TSL Pengambilan dari Alam',
+            'pengedar_c10' => 'Nama Pengedar TSL', 'nama_spesies_c10' => 'Nama Spesies',
+            'jenis_tsl_c10' => 'Jenis', 'negara_tujuan_c10' => 'Negara Tujuan',
+            'realisasi_ekspor_volume_c10' => 'Realisasi Ekspor Volume', 'realisasi_ekspor_satuan_c10' => 'Realisasi Ekspor Satuan',
+            'keterangan_c10' => 'Keterangan',
+            'tahun_c11' => 'Tahun', 'bulan_c11' => 'Periode Bulan',
+            'satuan_kerja_c11' => 'Satuan Kerja', 'ada_data_sitaan_c11' => 'Ada Data Sitaan/Penyerahan/Penyelamatan Satwa',
+            'spesies_c11' => 'Spesies', 'asal_usul_c11' => 'Asal-usul',
+            'jantan_c11' => 'Jantan', 'betina_c11' => 'Betina',
+            'belum_diketahui_c11' => 'Belum Diketahui', 'keterangan_c11' => 'Keterangan',
+            'tahun_c12' => 'Tahun', 'bulan_c12' => 'Periode Bulan',
+            'satuan_kerja_c12' => 'Satuan Kerja', 'ada_pnb_tsl_c12' => 'Ada PNB Pemanfaatan TSL',
+            'akun_pnb_c12' => 'Akun PNB', 'realisasi_pnb_c12' => 'Realisasi PNB', 'keterangan_c12' => 'Keterangan',
+            'tahun_c14' => 'Tahun', 'bulan_c14' => 'Periode Bulan', 'satuan_kerja_c14' => 'Satuan Kerja',
+            'ada_interaksi_negatif_c14' => 'Ada Interaksi Negatif Satwa Liar dan Manusia',
+            'spesies_c14' => 'Spesies yang Terlibat Interaksi Negatif', 'spesies_lainnya_c14' => 'Spesies Lainnya',
+            'tanggal_kejadian_c14' => 'Tanggal Kejadian', 'jumlah_individu_c14' => 'Jumlah Individu',
+            'satwa_mati_c14' => 'Satwa Mati', 'latitude_c14' => 'Koordinat X', 'longitude_c14' => 'Koordinat Y',
+            'meninggal_c14' => 'Meninggal', 'cedera_c14' => 'Cedera',
+            'kerusakan_kebun_c14' => 'Kerusakan Kebun/Lahan', 'kerusakan_bangunan_c14' => 'Kerusakan Bangunan',
+            'kambing_c14' => 'Kambing', 'sapi_c14' => 'Sapi', 'kerbau_c14' => 'Kerbau',
+            'anjing_c14' => 'Anjing', 'babi_c14' => 'Babi', 'unggas_c14' => 'Unggas',
+            'taksiran_kerugian_c14' => 'Taksiran Kerugian', 'upaya_penanggulangan_c14' => 'Upaya Penanggulangan',
+            'keterangan_c14' => 'Keterangan',
+            'lembaga_konservasi_c03' => 'Nama Lembaga Konservasi', 'spesies_koleksi_c03' => 'Spesies Koleksi',
+            'nama_spesies_lainnya_c03' => 'Nama Spesies Lainnya', 'jantan_c03' => 'Jantan',
+            'betina_c03' => 'Betina', 'belum_diketahui_c03' => 'Belum Diketahui', 'keterangan_c03' => 'Keterangan',
+            'nama_lembaga_c02' => 'Nama Lembaga Konservasi', 'bentuk_lembaga_c02' => 'Bentuk Lembaga',
+            'latitude_c02' => 'Koordinat X', 'longitude_c02' => 'Koordinat Y',
+            'alamat_lembaga_c02' => 'Alamat Lembaga Konservasi', 'nomor_dokumen_perizinan_c02' => 'Nomor Dokumen Perizinan',
+            'luas_areal_c02' => 'Luas Areal', 'tanggal_perizinan_c02' => 'Tanggal Perizinan',
+            'tanggal_berakhir_izin_c02' => 'Tanggal Berakhir Izin', 'keterangan_c02' => 'Keterangan',
+            'spesies_c01' => 'Spesies', 'spesies_lainnya_c01' => 'Nama Spesies Lainnya',
+            'jumlah_individu_c01' => 'Jumlah Individu', 'tanggal_perjumpaan_c01' => 'Tanggal Perjumpaan',
+            'latitude_c01' => 'Koordinat X', 'longitude_c01' => 'Koordinat Y',
+            'kategori_perjumpaan_c01' => 'Kategori Perjumpaan', 'keterangan_c01' => 'Keterangan',
         ];
         $label = $labels[$field] ?? ucwords(str_replace('_', ' ', $field));
 
@@ -379,6 +542,7 @@ class KonservasiController extends Controller
             'shapefile_ekosistem_zip'   => 'nullable|mimes:zip|max:10240',
             'file_sk_zonasi'            => 'nullable|mimes:pdf|max:2048',
             'shapefile_zonasi_zip'      => 'nullable|mimes:zip|max:10240',
+<<<<<<< HEAD
             'tahun_b02' => 'nullable|integer|min:2000|max:2100',
             'ada_akses_b02' => 'nullable|in:ya,tidak',
             'jenis_pengelolaan_b02' => 'required_if:ada_akses_b02,ya|nullable|in:akses_tradisional,kemitraan_konservasi',
@@ -403,6 +567,13 @@ class KonservasiController extends Controller
             'sk_parsial_file.uploaded' => 'File SK parsial gagal diunggah. Pastikan file PDF berukuran maksimal 2 MB, atau kosongkan lampiran untuk menyimpan data tanpa file.',
             'sk_parsial_file.mimes' => 'File SK parsial harus berformat PDF.',
             'sk_parsial_file.max' => 'Ukuran file SK parsial maksimal 2 MB.',
+=======
+            'dokumen_d03'               => 'nullable|mimes:pdf|max:10240',
+            'shapefile_d03'             => 'nullable|mimes:zip|max:10240',
+            'dokumen_perizinan_c02'     => 'nullable|mimes:pdf|max:2048',
+            'dokumen_perizinan_c04'     => 'nullable|mimes:pdf|max:2048',
+            'dokumen_perizinan_c06'     => 'nullable|mimes:pdf|max:2048',
+>>>>>>> 9000433 (pesan commit)
         ]);
 
         $subBidang = SubBidang::findOrFail($request->sub_bidang_id);
@@ -414,7 +585,22 @@ class KonservasiController extends Controller
             'A.05' => 'tahun_ekosistem',
             'A.06' => 'tahun_zonasi',
             'B.01' => 'tahun_b01',
+<<<<<<< HEAD
             'B.02' => 'tahun_b02',
+=======
+            'C.01' => 'tahun_c01',
+            'C.02' => 'tahun_c02',
+            'C.03' => 'tahun_c03',
+            'C.04' => 'tahun_c04',
+            'C.05' => 'tahun_c05',
+            'C.06' => 'tahun_c06',
+            'C.08' => 'tahun_c08',
+            'C.09' => 'tahun_c09',
+            'C.10' => 'tahun_c10',
+            'C.11' => 'tahun_c11',
+            'C.12' => 'tahun_c12',
+            'C.14' => 'tahun_c14',
+>>>>>>> 9000433 (pesan commit)
         ];
         $tahun = $request->input($yearFields[$subBidang->kode_sub] ?? '', date('Y'));
 
@@ -425,8 +611,25 @@ class KonservasiController extends Controller
             'B.01' => $request->filled('jumlah_laki') || $request->filled('jumlah_perempuan')
                 ? (int) $request->input('jumlah_laki', 0) + (int) $request->input('jumlah_perempuan', 0)
                 : null,
+<<<<<<< HEAD
             'B.02' => $request->filled('jumlah_laki_b02') || $request->filled('jumlah_perempuan_b02')
                 ? (int) $request->input('jumlah_laki_b02', 0) + (int) $request->input('jumlah_perempuan_b02', 0)
+=======
+            'C.03' => $request->input('ada_data_koleksi_c03') === 'ya'
+                ? (int) $request->input('jantan_c03', 0) + (int) $request->input('betina_c03', 0) + (int) $request->input('belum_diketahui_c03', 0)
+                : null,
+            'C.05' => $request->input('ada_data_jenis_tsl_c05') === 'ya'
+                ? (int) $request->input('jumlah_indukan_c05', 0) + (int) $request->input('hasil_penangkaran_c05', 0) + (int) $request->input('hasil_pemanfaatan_tahun_ini_c05', 0) + (int) $request->input('sisa_stok_hasil_pemanfaatan_c05', 0)
+                : null,
+            'C.11' => $request->input('ada_data_sitaan_c11') === 'ya'
+                ? (int) $request->input('jantan_c11', 0) + (int) $request->input('betina_c11', 0) + (int) $request->input('belum_diketahui_c11', 0)
+                : null,
+            'C.12' => $request->input('ada_pnb_tsl_c12') === 'ya'
+                ? (int) $request->input('realisasi_pnb_c12', 0)
+                : null,
+            'C.14' => $request->input('ada_interaksi_negatif_c14') === 'ya'
+                ? (int) $request->input('jumlah_individu_c14', 0)
+>>>>>>> 9000433 (pesan commit)
                 : null,
             default => null,
         };
@@ -456,8 +659,16 @@ class KonservasiController extends Controller
             'shapefile_ekosistem_zip'   => 'shapefiles',
             'file_sk_zonasi'            => 'dokumen_zonasi',
             'shapefile_zonasi_zip'      => 'shapefiles',
+<<<<<<< HEAD
             'dokumen_kerjasama_b02'     => 'dokumen_kerjasama',
             'shapefile_kerjasama_b02'   => 'shapefiles',
+=======
+            'dokumen_d03'               => 'dokumen_desain_tapak',
+            'shapefile_d03'             => 'shapefiles',
+            'dokumen_perizinan_c02'     => 'dokumen_perizinan',
+            'dokumen_perizinan_c04'     => 'dokumen_perizinan',
+            'dokumen_perizinan_c06'     => 'dokumen_perizinan',
+>>>>>>> 9000433 (pesan commit)
         ];
 
         foreach ($fileInputs as $inputName => $folderPath) {
@@ -472,9 +683,9 @@ class KonservasiController extends Controller
         $payload = [
             'sub_bidang_id' => $request->sub_bidang_id,
             'tahun'         => $tahun,
-            'bulan'         => $request->bulan ?? null,
-            'latitude'      => $request->latitude ?? null,
-            'longitude'     => $request->longitude ?? null,
+            'bulan'         => $request->input('bulan_c14', $request->input('bulan_c12', $request->input('bulan_c11', $request->input('bulan_c01', $request->bulan)))),
+            'latitude'      => $request->input('latitude_c14', $request->input('latitude_c06', $request->input('latitude_c04', $request->input('latitude_c02', $request->input('latitude_c01', $request->latitude))))),
+            'longitude'     => $request->input('longitude_c14', $request->input('longitude_c06', $request->input('longitude_c04', $request->input('longitude_c02', $request->input('longitude_c01', $request->longitude))))),
             'jumlah'        => $jumlah,
             'keterangan'    => $keteranganFinal,
         ];
