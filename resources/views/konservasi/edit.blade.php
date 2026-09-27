@@ -122,7 +122,8 @@
                             $editDateFields = ['sk_parsial_tanggal', 'sk_provinsi_tanggal', 'sk_penetapan_tanggal', 'sk_rpjp_tanggal_pengesahan', 'sk_rpjp_periode_berakhir', 'tanggal_batb', 'tanggal_pelaksanaan_evaluasi', 'tanggal_sk_zonasi'];
                             $editNumberFields = ['sk_parsial_luas', 'sk_provinsi_luas', 'sk_penetapan_luas', 'pal_baik', 'pal_rusak', 'pal_hilang', 'pal_total', 'panjang_pal_km', 'jumlah_laki', 'jumlah_perempuan', 'jumlah_bantuan'];
                             $editTextareaFields = ['rekomendasi_evaluasi', 'tindak_lanjut_evaluasi'];
-                            $editFileFields = ['sk_parsial_file', 'sk_provinsi_file', 'sk_penetapan_file', 'shapefile_zip', 'sk_rpjp_file', 'dokumen_batb', 'shapefile_monitoring_zip', 'file_dokumen_evaluasi', 'shapefile_ekosistem_zip', 'file_sk_zonasi', 'shapefile_zonasi_zip'];
+                            $editFileFields = ['sk_parsial_file', 'sk_provinsi_file', 'sk_penetapan_file', 'shapefile_zip', 'sk_rpjp_file', 'dokumen_batb', 'shapefile_monitoring_zip', 'file_dokumen_evaluasi', 'shapefile_ekosistem_zip', 'file_sk_zonasi', 'shapefile_zonasi_zip', 'dokumen_d03', 'shapefile_d03', 'foto_odtwa', 'dokumen_perizinan_pbp_d06', 'shapefile_pbp_d06', 'foto_sarana_prasarana_d07', 'shapefile_d10', 'dokumen_sk_d11', 'shapefile_d11', 'dokumen_perizinan_d14', 'shapefile_d14', 'dokumen_perizinan_c02', 'dokumen_perizinan_c04', 'dokumen_perizinan_c06'];
+                            $editImageFields = ['foto_odtwa', 'foto_sarana_prasarana_d07'];
                             $editCheckboxFields = ['hhbk_nihil', 'pertanian_nihil', 'perkebunan_nihil', 'peternakan_nihil', 'perikanan_nihil', 'wisata_nihil', 'produk_nihil', 'pembibitan_nihil', 'lainnya_nihil'];
                         @endphp
 
@@ -156,7 +157,7 @@
                                                         Nihil
                                                     </label>
                                                 @elseif(in_array($name, $editFileFields, true))
-                                                    <input type="file" name="{{ $name }}" accept="{{ str_contains($name, 'zip') ? '.zip' : '.pdf' }}" class="w-full text-xs text-slate-500 border border-slate-200 bg-slate-50 rounded-xl p-2.5">
+                                                    <input type="file" name="{{ $name }}{{ $name === 'foto_sarana_prasarana_d07' ? '[]' : '' }}" accept="{{ in_array($name, $editImageFields, true) ? 'image/png,image/jpeg' : (str_contains($name, 'zip') ? '.zip' : '.pdf') }}" {{ $name === 'foto_sarana_prasarana_d07' ? 'multiple' : '' }} class="w-full text-xs text-slate-500 border border-slate-200 bg-slate-50 rounded-xl p-2.5">
                                                     @if(!empty($value))
                                                         <p class="mt-1 text-[11px] text-slate-500">Lampiran tersimpan: {{ basename($value) }}. Kosongkan jika tidak ingin mengganti.</p>
                                                     @endif

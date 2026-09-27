@@ -51,8 +51,6 @@
     <!-- NAVBAR UTAMA -->
     <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            
-            <!-- Logo & Title Instansi -->
             <div class="flex items-center space-x-3">
                 <div class="w-11 h-11 rounded-xl bg-forest-700/10 border border-forest-700/20 flex items-center justify-center p-1.5 shadow-xs overflow-hidden">
                     <img src="{{ asset('images/logo-icon.png') }}" alt="Logo SIDAK" class="w-full h-full object-contain">
@@ -62,111 +60,42 @@
                     <span class="text-[11px] text-slate-500 font-medium">Sistem Input data konservasi</span>
                 </div>
             </div>
-
-            <!-- Menu Navigasi -->
             <nav class="hidden md:flex items-center space-x-1 bg-slate-100/80 p-1.5 rounded-xl border border-slate-200">
                 <a href="{{ route('konservasi.dashboard') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Dashboard</a>
                 <a href="{{ route('konservasi.index') }}" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-forest-700 shadow-xs">Rekapitulasi</a>
                 <a href="{{ route('konservasi.create') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Tambah Data</a>
                 <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Peta GIS</a>
             </nav>
-
-            <!-- Status & User Profile -->
             <div class="flex items-center space-x-4">
-                <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Sistem Aktif
-                </span>
+                <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Sistem Aktif</span>
                 <div class="flex items-center space-x-2.5 border-l pl-4 border-slate-200">
-                    <div class="w-9 h-9 rounded-full bg-forest-700 text-white flex items-center justify-center font-bold text-xs shadow-sm uppercase">
-                        {{ strtoupper(substr(Auth::user()->name ?? 'User', 0, 2)) }}
-                    </div>
-                    <div class="hidden sm:block text-left">
-                        <p class="text-xs font-bold text-slate-800 leading-tight">{{ Auth::user()->name ?? 'Pengguna' }}</p>
-                        <p class="text-[10px] text-slate-500">{{ Auth::user()->role ?? 'Operator' }}</p>
-                    </div>
+                    <div class="w-9 h-9 rounded-full bg-forest-700 text-white flex items-center justify-center font-bold text-xs shadow-sm uppercase">{{ strtoupper(substr(Auth::user()->name ?? 'User', 0, 2)) }}</div>
+                    <div class="hidden sm:block text-left"><p class="text-xs font-bold text-slate-800 leading-tight">{{ Auth::user()->name ?? 'Pengguna' }}</p><p class="text-[10px] text-slate-500">{{ Auth::user()->role ?? 'Operator' }}</p></div>
                 </div>
             </div>
-
         </div>
     </header>
 
     <!-- MAIN CONTENT CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-
         <!-- HEADER BANNER & TOMBOL TAMBAH -->
         <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-                <h2 class="font-extrabold text-2xl text-slate-900 tracking-tight">
-                    Rekapitulasi Data Konservasi
-                </h2>
-                <p class="text-xs text-slate-500 mt-1">
-                    Daftar entri data kinerja, pemantauan satwa, dan kegiatan kawasan BKSDA Sulawesi Tengah
-                </p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('konservasi.create') }}" class="inline-flex items-center justify-center px-4.5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 shadow-md transition">
-                    <i class="fa-solid fa-plus mr-1.5"></i> Tambah Data
-                </a>
-            </div>
+            <div><h2 class="font-extrabold text-2xl text-slate-900 tracking-tight">Rekapitulasi Data Konservasi</h2><p class="text-xs text-slate-500 mt-1">Daftar entri data kinerja, pemantauan satwa, dan kegiatan kawasan BKSDA Sulawesi Tengah</p></div>
+            <div class="flex items-center gap-3"><a href="{{ route('konservasi.create') }}" class="inline-flex items-center justify-center px-4.5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 shadow-md transition"><i class="fa-solid fa-plus mr-1.5"></i> Tambah Data</a></div>
         </div>
 
-        <!-- Flash Alert Success -->
         @if(session('success'))
             <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <span class="text-xs font-bold">{{ session('success') }}</span>
-                </div>
-                <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-800 text-sm">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0"><i class="fa-solid fa-check"></i></div><span class="text-xs font-bold">{{ session('success') }}</span></div>
+                <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-800 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
         @endif
 
         <!-- RINGKASAN STAT CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Baris Data</p>
-                    <h3 class="text-3xl font-extrabold text-slate-900 mt-1">{{ method_exists($data, 'total') ? $data->total() : count($data) }}</h3>
-                    <p class="text-[11px] text-emerald-600 font-semibold mt-1.5 flex items-center gap-1">
-                        <i class="fa-solid fa-layer-group text-[10px]"></i> Database Tersimpan
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold border border-amber-100 shadow-xs">
-                    <i class="fa-solid fa-database"></i>
-                </div>
-            </div>
-
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Status Pencarian</p>
-                    <h3 class="text-lg font-extrabold text-slate-900 mt-1 truncate max-w-[180px]">
-                        {{ request('sub_bidang') ? 'Filter: '.request('sub_bidang') : (request('bidang') ? 'Bidang Terpilih' : (request('search') ? request('search') : 'Semua Data')) }}
-                    </h3>
-                    <p class="text-[11px] text-amber-600 font-semibold mt-1.5 flex items-center gap-1">
-                        <i class="fa-solid fa-filter text-[10px]"></i> Filter Aktif
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold border border-emerald-100 shadow-xs">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-            </div>
-
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Peta GIS Terkait</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-1">Palu & Sulteng</h3>
-                    <p class="text-[11px] text-blue-600 font-semibold mt-1.5 flex items-center gap-1">
-                        <i class="fa-solid fa-map-location-dot text-[10px]"></i> Terhubung Koordinat
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold border border-blue-100 shadow-xs">
-                    <i class="fa-solid fa-satellite"></i>
-                </div>
-            </div>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Baris Data</p><h3 class="text-3xl font-extrabold text-slate-900 mt-1">{{ method_exists($data, 'total') ? $data->total() : count($data) }}</h3><p class="text-[11px] text-emerald-600 font-semibold mt-1.5 flex items-center gap-1"><i class="fa-solid fa-layer-group text-[10px]"></i> Database Tersimpan</p></div><div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold border border-amber-100 shadow-xs"><i class="fa-solid fa-database"></i></div></div>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Status Pencarian</p><h3 class="text-lg font-extrabold text-slate-900 mt-1 truncate max-w-[180px]">{{ request('sub_bidang') ? 'Filter: '.request('sub_bidang') : (request('bidang') ? 'Bidang Terpilih' : (request('search') ? request('search') : 'Semua Data')) }}</h3><p class="text-[11px] text-amber-600 font-semibold mt-1.5 flex items-center gap-1"><i class="fa-solid fa-filter text-[10px]"></i> Filter Aktif</p></div><div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold border border-emerald-100 shadow-xs"><i class="fa-solid fa-magnifying-glass"></i></div></div>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Peta GIS Terkait</p><h3 class="text-2xl font-extrabold text-slate-900 mt-1">Palu & Sulteng</h3><p class="text-[11px] text-blue-600 font-semibold mt-1.5 flex items-center gap-1"><i class="fa-solid fa-map-location-dot text-[10px]"></i> Terhubung Koordinat</p></div><div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold border border-blue-100 shadow-xs"><i class="fa-solid fa-satellite"></i></div></div>
         </div>
 
         <!-- CARD FILTER BERTINGKAT (BIDANG -> SUB-BIDANG) -->
@@ -804,6 +733,116 @@
                         </tbody>
                     </table>
                 @else
+                @if($selectedSub)
+                    @php
+                        $detailColumnLabels = [];
+                        $detailRowsById = [];
+                        $uploadFolders = ['dokumen_sk/', 'shapefiles/', 'dokumen_rpjp/', 'dokumen_batb/', 'dokumen_evaluasi/', 'dokumen_zonasi/', 'dokumen_desain_tapak/', 'dokumen_perizinan/', 'foto_odtwa/', 'foto_sarana_prasarana/'];
+
+                        foreach ($data as $rowItem) {
+                            $rowDetails = [];
+                            foreach (explode(' | ', (string) $rowItem->keterangan) as $detailLine) {
+                                if (trim($detailLine) === '') {
+                                    continue;
+                                }
+
+                                $separator = strpos($detailLine, ': ');
+                                $label = $separator === false ? 'Detail' : trim(substr($detailLine, 0, $separator));
+                                $value = $separator === false ? trim($detailLine) : trim(substr($detailLine, $separator + 2));
+                                $rowDetails[$label] = $value;
+                                $detailColumnLabels[$label] = $label;
+                            }
+                            $detailRowsById[$rowItem->id] = $rowDetails;
+                        }
+                    @endphp
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full w-max text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                                    <th class="py-4 px-5">No</th>
+                                    @foreach ($detailColumnLabels as $detailColumnLabel)
+                                        <th class="min-w-36 max-w-64 px-4 py-4">{{ $detailColumnLabel }}</th>
+                                    @endforeach
+                                    <th class="py-4 px-5 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                                @forelse($data as $index => $item)
+                                    @php
+                                        $rowDetails = $detailRowsById[$item->id] ?? [];
+                                    @endphp
+                                    <tr class="align-top hover:bg-slate-50/80 transition-colors">
+                                        <td class="px-5 py-4 font-bold text-slate-400">{{ method_exists($data, 'firstItem') ? $data->firstItem() + $index : $index + 1 }}</td>
+                                        @foreach ($detailColumnLabels as $detailColumnLabel)
+                                            @php
+                                                $detailValue = $rowDetails[$detailColumnLabel] ?? null;
+                                                $uploadPaths = $detailValue === null ? [] : array_map('trim', explode(', ', $detailValue));
+                                                $isStoredUpload = $uploadPaths !== [];
+                                                foreach ($uploadPaths as $uploadPath) {
+                                                    $matchesUploadFolder = false;
+                                                    foreach ($uploadFolders as $uploadFolder) {
+                                                        if (str_starts_with($uploadPath, $uploadFolder)) {
+                                                            $matchesUploadFolder = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!$matchesUploadFolder) {
+                                                        $isStoredUpload = false;
+                                                        break;
+                                                    }
+                                                }
+                                            @endphp
+                                            <td class="max-w-64 whitespace-normal break-words px-4 py-4">
+                                                @if ($isStoredUpload)
+                                                    <div class="flex flex-wrap gap-x-2 gap-y-1">
+                                                        @foreach ($uploadPaths as $uploadPath)
+                                                            @php
+                                                                $fileType = strtoupper(pathinfo($uploadPath, PATHINFO_EXTENSION));
+                                                            @endphp
+                                                            <a href="{{ asset('storage/' . ltrim($uploadPath, '/')) }}" target="_blank" rel="noopener noreferrer" title="{{ basename($uploadPath) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:underline">
+                                                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i> Lihat {{ $fileType }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    {{ $detailValue ?? '-' }}
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                        <td class="whitespace-nowrap px-5 py-4 text-center">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <button type="button" @click="openModal = true; modalTitle = '{{ addslashes($item->subBidang->nama_sub_bidang ?? 'Detail Data') }}'; modalContent = '{{ addslashes($item->keterangan ?? 'Tidak ada rincian') }}'" class="flex h-8 w-8 items-center justify-center rounded-xl border border-blue-200/80 bg-blue-50 text-blue-600 shadow-xs transition hover:bg-blue-100" title="Lihat Detail Lengkap">
+                                                    <i class="fa-solid fa-eye text-xs"></i>
+                                                </button>
+                                                <a href="{{ route('konservasi.edit', $item->id) }}" class="flex h-8 w-8 items-center justify-center rounded-xl border border-amber-200/80 bg-amber-50 text-amber-600 shadow-xs transition hover:bg-amber-100" title="Edit Data">
+                                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                                </a>
+                                                <form action="{{ route('konservasi.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-xl border border-rose-200/80 bg-rose-50 text-rose-600 shadow-xs transition hover:bg-rose-100" title="Hapus Data">
+                                                        <i class="fa-solid fa-trash-can text-xs"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="{{ count($detailColumnLabels) + 2 }}" class="px-5 py-12 text-center">
+                                            <div class="mx-auto max-w-xs space-y-2">
+                                                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-lg text-slate-400"><i class="fa-solid fa-folder-open"></i></div>
+                                                <p class="text-xs font-bold text-slate-600">Data Tidak Ditemukan</p>
+                                                <p class="text-[11px] text-slate-400">Belum ada data pada sub-bidang {{ $selectedSub }}.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                @else
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
@@ -829,22 +868,72 @@
                                 </td>
                                 
                                 <!-- KOLOM SUB-BIDANG & DETAIL LENGKAP -->
-                                <td class="py-4 px-5 max-w-md">
+                                <td class="py-4 px-5 w-[38rem] max-w-[40vw] align-top">
                                     <p class="font-bold text-slate-800 text-sm">
                                         {{ $item->subBidang->kode_sub ?? '' }}. {{ $item->subBidang->nama_sub_bidang ?? '-' }}
                                     </p>
 
                                     <!-- DETAIL LENGKAP KETERANGAN & PARAMETER SK -->
                                     @if($item->keterangan)
-                                        <div class="mt-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200/70 text-[11px] text-slate-600 leading-relaxed font-sans whitespace-pre-line">
+                                        <div class="mt-2 max-h-48 max-w-full overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200/70 bg-slate-50">
+                                            <table class="w-full table-fixed border-collapse text-left text-[11px] leading-relaxed [overflow-wrap:anywhere]">
+                                                <colgroup>
+                                                    <col class="w-[38%]">
+                                                    <col>
+                                                </colgroup>
+                                                <thead class="sticky top-0 bg-slate-100 text-[10px] font-extrabold uppercase tracking-wide text-slate-500">
+                                                    <tr>
+                                                        <th class="border-b border-slate-200 px-2.5 py-1.5">Rincian</th>
+                                                        <th class="border-b border-slate-200 px-2.5 py-1.5">Nilai</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="divide-y divide-slate-200/70 text-slate-600">
                                             @php
-                                                // Memisah separator '|' menjadi baris-baris terpisah agar mudah dibaca
-                                                $formattedKet = str_replace(' | ', "\n• ", $item->keterangan);
-                                                if (strpos($formattedKet, '• ') !== 0) {
-                                                    $formattedKet = '• ' . $formattedKet;
-                                                }
+                                                $uploadFolders = ['dokumen_sk/', 'shapefiles/', 'dokumen_rpjp/', 'dokumen_batb/', 'dokumen_evaluasi/', 'dokumen_zonasi/', 'dokumen_desain_tapak/', 'dokumen_perizinan/', 'foto_odtwa/', 'foto_sarana_prasarana/'];
                                             @endphp
-                                            {{ $formattedKet }}
+                                            @foreach (explode(' | ', (string) $item->keterangan) as $detailLine)
+                                                @php
+                                                    $separator = strpos($detailLine, ': ');
+                                                    $detailLabel = $separator === false ? null : trim(substr($detailLine, 0, $separator));
+                                                    $detailValue = $separator === false ? trim($detailLine) : trim(substr($detailLine, $separator + 2));
+                                                    $uploadPaths = $separator === false ? [] : array_map('trim', explode(', ', $detailValue));
+                                                    $isStoredUpload = $uploadPaths !== [];
+                                                    foreach ($uploadPaths as $uploadPath) {
+                                                        $matchesUploadFolder = false;
+                                                        foreach ($uploadFolders as $uploadFolder) {
+                                                            if (str_starts_with($uploadPath, $uploadFolder)) {
+                                                                $matchesUploadFolder = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!$matchesUploadFolder) {
+                                                            $isStoredUpload = false;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                        <tr class="align-top">
+                                                            <th scope="row" class="px-2.5 py-1.5 text-left font-semibold text-slate-700">{{ $detailLabel ?? 'Detail' }}</th>
+                                                            <td class="min-w-0 break-words px-2.5 py-1.5">
+                                                                @if ($isStoredUpload)
+                                                                    <div class="flex flex-wrap gap-x-2 gap-y-1">
+                                                                        @foreach ($uploadPaths as $uploadPath)
+                                                                            @php
+                                                                                $fileType = strtoupper(pathinfo($uploadPath, PATHINFO_EXTENSION));
+                                                                            @endphp
+                                                                            <a href="{{ asset('storage/' . ltrim($uploadPath, '/')) }}" target="_blank" rel="noopener noreferrer" title="{{ basename($uploadPath) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:underline">
+                                                                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i> Lihat {{ $fileType }}
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @else
+                                                                    {{ $detailValue }}
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                            @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     @else
                                         <span class="text-slate-400 italic text-[11px] mt-1 block">Tidak ada rincian data</span>
@@ -923,6 +1012,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                @endif
                 @endif
             </div>
 

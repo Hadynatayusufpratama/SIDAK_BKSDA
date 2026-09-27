@@ -361,4 +361,174 @@ class KonservasiStoreTest extends TestCase
         $this->assertStringContainsString('Keterangan: Catatan baru', $record->keterangan);
     }
 
+    public function test_c15_release_fields_are_saved_with_period_count_and_coordinates(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $bidang = Bidang::create(['nama_bidang' => 'Konservasi Spesies dan Genetik']);
+        $subBidang = SubBidang::create([
+            'bidang_id' => $bidang->id,
+            'kode_sub' => 'C.15',
+            'nama_sub_bidang' => 'Rekapitulasi Pelepasliaran Kembali Satwa',
+        ]);
+
+        $this->actingAs($user)->post(route('konservasi.store'), [
+            'sub_bidang_id' => $subBidang->id,
+            'tahun_c15' => '2025',
+            'bulan_c15' => '9',
+            'satuan_kerja_c15' => 'Balai KSDA Sulawesi Tengah',
+            'ada_pelepasan_satwa_c15' => 'ya',
+            'spesies_c15' => 'Maleo',
+            'jumlah_individu_c15' => '2',
+            'asal_usul_c15' => 'Hasil Penyelamatan Satwa',
+            'longitude_c15' => '119.87123',
+            'latitude_c15' => '-0.897123',
+            'keterangan_c15' => 'Pelepasliaran di habitat alami',
+            'keterangan' => 'Catatan umum duplikat',
+        ])->assertRedirect(route('konservasi.index'));
+
+        $record = DataKonservasi::firstOrFail();
+        $this->assertSame(2025, $record->tahun);
+        $this->assertSame(9, $record->bulan);
+        $this->assertSame(2, $record->jumlah);
+        $this->assertSame('-0.897123', $record->latitude);
+        $this->assertSame('119.87123', $record->longitude);
+        $this->assertStringContainsString('Spesies yang Dilepasliarkan: Maleo', $record->keterangan);
+        $this->assertStringContainsString('Asal-usul: Hasil Penyelamatan Satwa', $record->keterangan);
+        $this->assertStringContainsString('Keterangan: Pelepasliaran di habitat alami', $record->keterangan);
+        $this->assertSame(1, substr_count($record->keterangan, 'Keterangan:'));
+        $this->assertStringNotContainsString('Catatan umum duplikat', $record->keterangan);
+    }
+
+    public function test_c16_birth_fields_are_saved_with_period_count_and_coordinates(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $bidang = Bidang::create(['nama_bidang' => 'Konservasi Spesies dan Genetik']);
+        $subBidang = SubBidang::create([
+            'bidang_id' => $bidang->id,
+            'kode_sub' => 'C.16',
+            'nama_sub_bidang' => 'Rekapitulasi Kelahiran Satwa',
+        ]);
+
+        $this->actingAs($user)->post(route('konservasi.store'), [
+            'sub_bidang_id' => $subBidang->id,
+            'tahun_c16' => '2025',
+            'bulan_c16' => '9',
+            'satuan_kerja_c16' => 'Balai KSDA Sulawesi Tengah',
+            'ada_kelahiran_satwa_c16' => 'ya',
+            'spesies_c16' => 'Maleo',
+            'tanggal_kelahiran_c16' => '2025-09-12',
+            'usulan_nama_satwa_c16' => 'Bintang',
+            'jantan_c16' => '1',
+            'betina_c16' => '2',
+            'belum_diketahui_c16' => '0',
+            'longitude_c16' => '119.87123',
+            'latitude_c16' => '-0.897123',
+            'keterangan_c16' => 'Kelahiran di habitat alami',
+            'keterangan' => 'Catatan umum duplikat',
+        ])->assertRedirect(route('konservasi.index'));
+
+        $record = DataKonservasi::firstOrFail();
+        $this->assertSame(2025, $record->tahun);
+        $this->assertSame(9, $record->bulan);
+        $this->assertSame(3, $record->jumlah);
+        $this->assertSame('-0.897123', $record->latitude);
+        $this->assertSame('119.87123', $record->longitude);
+        $this->assertStringContainsString('Spesies Satwa: Maleo', $record->keterangan);
+        $this->assertStringContainsString('Tanggal Kelahiran: 2025-09-12', $record->keterangan);
+        $this->assertStringContainsString('Usulan Nama Satwa: Bintang', $record->keterangan);
+        $this->assertStringContainsString('Keterangan: Kelahiran di habitat alami', $record->keterangan);
+        $this->assertSame(1, substr_count($record->keterangan, 'Keterangan:'));
+        $this->assertStringNotContainsString('Catatan umum duplikat', $record->keterangan);
+    }
+
+    public function test_c17_death_fields_are_saved_with_period_count_and_coordinates(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $bidang = Bidang::create(['nama_bidang' => 'Konservasi Spesies dan Genetik']);
+        $subBidang = SubBidang::create([
+            'bidang_id' => $bidang->id,
+            'kode_sub' => 'C.17',
+            'nama_sub_bidang' => 'Rekapitulasi Kematian Satwa Liar',
+        ]);
+
+        $this->actingAs($user)->post(route('konservasi.store'), [
+            'sub_bidang_id' => $subBidang->id,
+            'tahun_c17' => '2025',
+            'bulan_c17' => '9',
+            'satuan_kerja_c17' => 'Balai KSDA Sulawesi Tengah',
+            'ada_kematian_satwa_c17' => 'ya',
+            'spesies_c17' => 'Maleo',
+            'tanggal_kematian_c17' => '2025-09-12',
+            'perkiraan_usia_c17' => 'Dewasa',
+            'penyebab_kematian_c17' => 'Sakit/Penyakit',
+            'jantan_c17' => '1',
+            'betina_c17' => '2',
+            'belum_diketahui_c17' => '0',
+            'upaya_penanganan_c17' => 'Pemeriksaan dan penanganan satwa',
+            'longitude_c17' => '119.87123',
+            'latitude_c17' => '-0.897123',
+            'keterangan_c17' => 'Kematian tercatat di habitat alami',
+            'keterangan' => 'Catatan umum duplikat',
+        ])->assertRedirect(route('konservasi.index'));
+
+        $record = DataKonservasi::firstOrFail();
+        $this->assertSame(2025, $record->tahun);
+        $this->assertSame(9, $record->bulan);
+        $this->assertSame(3, $record->jumlah);
+        $this->assertSame('-0.897123', $record->latitude);
+        $this->assertSame('119.87123', $record->longitude);
+        $this->assertStringContainsString('Spesies Satwa: Maleo', $record->keterangan);
+        $this->assertStringContainsString('Tanggal Kematian: 2025-09-12', $record->keterangan);
+        $this->assertStringContainsString('Perkiraan Usia: Dewasa', $record->keterangan);
+        $this->assertStringContainsString('Penyebab Kematian: Sakit/Penyakit', $record->keterangan);
+        $this->assertStringContainsString('Keterangan: Kematian tercatat di habitat alami', $record->keterangan);
+        $this->assertSame(1, substr_count($record->keterangan, 'Keterangan:'));
+        $this->assertStringNotContainsString('Catatan umum duplikat', $record->keterangan);
+    }
+
+    public function test_file_uploads_are_stored_for_pdf_zip_and_image_fields(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $bidang = Bidang::create(['nama_bidang' => 'Konservasi Spesies dan Genetik']);
+        $createSubBidang = fn (string $kode) => SubBidang::create([
+            'bidang_id' => $bidang->id,
+            'kode_sub' => $kode,
+            'nama_sub_bidang' => $kode,
+        ]);
+
+        $this->actingAs($user);
+
+        $odtwa = $createSubBidang('D.04');
+        $this->post(route('konservasi.store'), [
+            'sub_bidang_id' => $odtwa->id,
+            'foto_odtwa' => UploadedFile::fake()->image('odtwa.jpg'),
+        ])->assertRedirect(route('konservasi.index'));
+        $this->assertCount(1, Storage::disk('public')->allFiles('foto_odtwa'));
+
+        $izin = $createSubBidang('C.02');
+        $this->post(route('konservasi.store'), [
+            'sub_bidang_id' => $izin->id,
+            'dokumen_perizinan_c02' => UploadedFile::fake()->create('izin.pdf', 100, 'application/pdf'),
+        ])->assertRedirect(route('konservasi.index'));
+        $this->assertCount(1, Storage::disk('public')->allFiles('dokumen_perizinan'));
+
+        $shapefile = $createSubBidang('D.10');
+        $this->post(route('konservasi.store'), [
+            'sub_bidang_id' => $shapefile->id,
+            'shapefile_d10' => UploadedFile::fake()->create('area.zip', 100, 'application/zip'),
+        ])->assertRedirect(route('konservasi.index'));
+        $this->assertCount(1, Storage::disk('public')->allFiles('shapefiles'));
+
+        $sarana = $createSubBidang('D.07');
+        $this->post(route('konservasi.store'), [
+            'sub_bidang_id' => $sarana->id,
+            'foto_sarana_prasarana_d07' => [
+                UploadedFile::fake()->image('sarana-1.jpg'),
+                UploadedFile::fake()->image('sarana-2.jpg'),
+            ],
+        ])->assertRedirect(route('konservasi.index'));
+        $this->assertCount(2, Storage::disk('public')->allFiles('foto_sarana_prasarana'));
+    }
+
 }

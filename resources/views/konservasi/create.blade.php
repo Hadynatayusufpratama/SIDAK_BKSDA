@@ -188,6 +188,13 @@
                  adaPnbTslC12: '',
                  adaInteraksiNegatifC14: '',
                  spesiesInteraksiC14: '',
+                 adaPelepasliaranC15: 'ya',
+                 spesiesPelepasliaranC15: '',
+                 adaKelahiranC16: 'ya',
+                 spesiesKelahiranC16: '',
+                 adaKematianC17: 'ya',
+                 spesiesKematianC17: '',
+                 penyebabKematianC17: '',
                  temuanPerjumpaanSpesiesC01: '',
                  kategoriPerjumpaanC01: '',
                  spesiesC01: '',
@@ -2948,6 +2955,293 @@
                     </div>
                 </div>
 
+                <div x-cloak x-show="selectedSubBidangKode === 'C.15'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c15" x-bind:required="selectedSubBidangKode === 'C.15'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c15" x-bind:required="selectedSubBidangKode === 'C.15'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c15" x-bind:required="selectedSubBidangKode === 'C.15'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Kegiatan Pelepasliaran Satwa pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada kegiatan pelepasliaran satwa</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_pelepasan_satwa_c15" value="ya" x-model="adaPelepasliaranC15" x-bind:required="selectedSubBidangKode === 'C.15'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_pelepasan_satwa_c15" value="tidak" x-model="adaPelepasliaranC15" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaPelepasliaranC15 === 'ya'" x-transition x-init="$watch('selectedSubBidangKode', code => { if (code === 'C.15') $nextTick(() => window.initC15Map()) }); $watch('adaPelepasliaranC15', value => { if (value === 'ya') $nextTick(() => window.initC15Map()) })" class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang dilepasliarkan: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c15" x-model="spesiesPelepasliaranC15" x-bind:required="adaPelepasliaranC15 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesPelepasliaranC15 === 'Lainnya'" type="text" name="spesies_lainnya_c15" x-bind:required="adaPelepasliaranC15 === 'ya' && spesiesPelepasliaranC15 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="max-w-md">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Jumlah Individu Satwa: <span class="text-rose-500">*</span></label>
+                            <div class="flex items-center rounded-xl border border-slate-300 bg-slate-50">
+                                <input type="number" min="1" name="jumlah_individu_c15" value="1" x-bind:required="adaPelepasliaranC15 === 'ya'" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none">
+                                <span class="border-l border-slate-300 px-3 text-xs text-slate-500">Indv.</span>
+                            </div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">Asal-usul: <span class="text-rose-500">*</span></legend>
+                            <div class="space-y-2">
+                                @foreach (['Hasil Penyerahan Masyarakat', 'Hasil Sitaan', 'Hasil Penyelamatan Satwa', 'Hasil Operasi atau Razia', 'Hasil Rehabilitasi', 'Hasil Penangkaran (Reintroduksi)', 'Hasil Interaksi Negatif Satwa Liar dan Manusia', 'Hasil Translokasi Habitat', 'Hasil Pengembalian dari Kebun Binatang atau Sirkus', 'Lainnya'] as $asalUsulPelepasliaran)
+                                    <label class="flex items-center gap-2 text-xs font-medium text-slate-700">
+                                        <input type="radio" name="asal_usul_c15" value="{{ $asalUsulPelepasliaran }}" x-bind:required="adaPelepasliaranC15 === 'ya'" class="text-forest-600 focus:ring-forest-600">
+                                        <span>{{ $asalUsulPelepasliaran }}</span>
+                                        <i class="fa-solid fa-circle-info text-slate-400" title="Pilih sumber asal satwa yang dilepasliarkan"></i>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </fieldset>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK GEOGRAFIS PELEPASLIARAN SATWA (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c15" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">X</span><input id="longitude-c15" type="number" step="any" name="longitude_c15" placeholder="119.87123" x-bind:required="adaPelepasliaranC15 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">Y</span><input id="latitude-c15" type="number" step="any" name="latitude_c15" placeholder="-0.897123" x-bind:required="adaPelepasliaranC15 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c15" rows="4" placeholder="Masukkan informasi lainnya" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.16'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c16" x-bind:required="selectedSubBidangKode === 'C.16'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c16" x-bind:required="selectedSubBidangKode === 'C.16'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c16" x-bind:required="selectedSubBidangKode === 'C.16'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Kelahiran Satwa pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada kelahiran satwa</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_kelahiran_satwa_c16" value="ya" x-model="adaKelahiranC16" x-bind:required="selectedSubBidangKode === 'C.16'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_kelahiran_satwa_c16" value="tidak" x-model="adaKelahiranC16" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaKelahiranC16 === 'ya'" x-transition x-init="$watch('selectedSubBidangKode', code => { if (code === 'C.16') $nextTick(() => window.initC16Map()) }); $watch('adaKelahiranC16', value => { if (value === 'ya') $nextTick(() => window.initC16Map()) })" class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies Satwa: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c16" x-model="spesiesKelahiranC16" x-bind:required="adaKelahiranC16 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesKelahiranC16 === 'Lainnya'" type="text" name="spesies_lainnya_c16" x-bind:required="adaKelahiranC16 === 'ya' && spesiesKelahiranC16 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Kelahiran: <span class="text-rose-500">*</span></label>
+                                <input type="date" name="tanggal_kelahiran_c16" x-bind:required="adaKelahiranC16 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Usulan Nama Satwa:</label>
+                                <input type="text" name="usulan_nama_satwa_c16" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            @foreach ([['jantan_c16', 'Jantan'], ['betina_c16', 'Betina'], ['belum_diketahui_c16', 'Belum Diketahui']] as [$fieldJumlahC16, $labelJumlahC16])
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelJumlahC16 }}:</label>
+                                    <div class="flex items-center rounded-xl border border-slate-300 bg-slate-50">
+                                        <input type="number" min="0" name="{{ $fieldJumlahC16 }}" value="0" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none">
+                                        <span class="border-l border-slate-300 px-3 text-xs text-slate-500">Indv.</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK GEOGRAFIS KELAHIRAN SATWA (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c16" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">X</span><input id="longitude-c16" type="number" step="any" name="longitude_c16" placeholder="119.87123" x-bind:required="adaKelahiranC16 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">Y</span><input id="latitude-c16" type="number" step="any" name="latitude_c16" placeholder="-0.897123" x-bind:required="adaKelahiranC16 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c16" rows="4" placeholder="Masukkan informasi lainnya" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea></div>
+                    </div>
+                </div>
+
+                <div x-cloak x-show="selectedSubBidangKode === 'C.17'" x-transition class="space-y-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tahun: <span class="text-rose-500">*</span></label>
+                            <select name="tahun_c17" x-bind:required="selectedSubBidangKode === 'C.17'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih tahun</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Periode Bulan: <span class="text-rose-500">*</span></label>
+                            <select name="bulan_c17" x-bind:required="selectedSubBidangKode === 'C.17'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih periode</option>
+                                @for ($month = 1; $month <= 12; $month++)
+                                    <option value="{{ $month }}">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
+                        <select name="satuan_kerja_c17" x-bind:required="selectedSubBidangKode === 'C.17'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            <option value="">Pilih satuan kerja</option>
+                            <option value="Balai KSDA Sulawesi Tengah">Balai KSDA Sulawesi Tengah</option>
+                        </select>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-slate-700">Ada Kematian Satwa Liar pada Periode tersebut?</label>
+                        <p class="text-[11px] text-slate-500">Pilih tidak ada jika tidak ada kematian satwa liar</p>
+                        <div class="mt-4 flex items-center gap-6">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_kematian_satwa_c17" value="ya" x-model="adaKematianC17" x-bind:required="selectedSubBidangKode === 'C.17'" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Ya, ada</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="ada_kematian_satwa_c17" value="tidak" x-model="adaKematianC17" class="text-forest-600 focus:ring-forest-600">
+                                <span class="text-xs font-medium text-slate-700">Tidak ada (Nihil)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div x-cloak x-show="adaKematianC17 === 'ya'" x-transition x-init="$watch('selectedSubBidangKode', code => { if (code === 'C.17') $nextTick(() => window.initC17Map()) }); $watch('adaKematianC17', value => { if (value === 'ya') $nextTick(() => window.initC17Map()) })" class="space-y-6 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Spesies Satwa: <span class="text-rose-500">*</span></label>
+                            <select name="spesies_c17" x-model="spesiesKematianC17" x-bind:required="adaKematianC17 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                <option value="">Pilih spesies</option>
+                                @foreach ($spesiesKoleksiC03 as $namaSpesies)
+                                    <option value="{{ $namaSpesies }}">{{ $namaSpesies }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <input x-cloak x-show="spesiesKematianC17 === 'Lainnya'" type="text" name="spesies_lainnya_c17" x-bind:required="adaKematianC17 === 'ya' && spesiesKematianC17 === 'Lainnya'" placeholder="Masukkan nama spesies" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Kematian: <span class="text-rose-500">*</span></label>
+                                <input type="date" name="tanggal_kematian_c17" x-bind:required="adaKematianC17 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Perkiraan Usia: <span class="text-rose-500">*</span></label>
+                                <select name="perkiraan_usia_c17" x-bind:required="adaKematianC17 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                    <option value="">Pilih perkiraan usia</option>
+                                    <option value="Anakan">Anakan</option>
+                                    <option value="Remaja">Remaja</option>
+                                    <option value="Dewasa">Dewasa</option>
+                                    <option value="Tidak diketahui">Tidak diketahui</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Penyebab Kematian: <span class="text-rose-500">*</span></label>
+                                <select name="penyebab_kematian_c17" x-model="penyebabKematianC17" x-bind:required="adaKematianC17 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                                    <option value="">Pilih penyebab kematian</option>
+                                    <option value="Sakit/Penyakit">Sakit/Penyakit</option>
+                                    <option value="Kecelakaan">Kecelakaan</option>
+                                    <option value="Konflik dengan manusia">Konflik dengan manusia</option>
+                                    <option value="Perburuan">Perburuan</option>
+                                    <option value="Keracunan">Keracunan</option>
+                                    <option value="Penyebab alami">Penyebab alami</option>
+                                    <option value="Tidak diketahui">Tidak diketahui</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                                <input x-cloak x-show="penyebabKematianC17 === 'Lainnya'" type="text" name="penyebab_kematian_lainnya_c17" x-bind:required="adaKematianC17 === 'ya' && penyebabKematianC17 === 'Lainnya'" placeholder="Masukkan penyebab kematian" class="mt-3 w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
+                            </div>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">Jumlah Individu Satwa Liar yang Mati Berdasarkan Jenis Kelamin: <span class="text-rose-500">*</span></legend>
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                @foreach ([['jantan_c17', 'Jantan'], ['betina_c17', 'Betina'], ['belum_diketahui_c17', 'Belum Diketahui']] as [$fieldJumlahC17, $labelJumlahC17])
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1">{{ $labelJumlahC17 }}:</label>
+                                        <div class="flex items-center rounded-xl border border-slate-300 bg-slate-50">
+                                            <input type="number" min="0" name="{{ $fieldJumlahC17 }}" value="0" class="w-full rounded-l-xl bg-transparent p-3 text-xs text-slate-800 focus:outline-none">
+                                            <span class="border-l border-slate-300 px-3 text-xs text-slate-500">Indv.</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </fieldset>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Upaya Penanganan:</label>
+                            <textarea name="upaya_penanganan_c17" rows="4" placeholder="Upaya penanganan yang telah dan akan dilakukan" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea>
+                        </div>
+                        <fieldset class="rounded-xl border border-slate-200 p-4">
+                            <legend class="px-2 text-xs font-extrabold text-slate-800">TITIK GEOGRAFIS KEMATIAN SATWA LIAR (XY): <span class="text-rose-500">*</span></legend>
+                            <div id="map-c17" class="h-80 w-full rounded-lg border border-slate-200"></div>
+                            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">X</span><input id="longitude-c17" type="number" step="any" name="longitude_c17" placeholder="119.87123" x-bind:required="adaKematianC17 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                                <label class="flex items-center rounded-lg border border-slate-300 bg-white"><span class="border-r border-slate-200 px-3 py-3 text-xs text-slate-500">Y</span><input id="latitude-c17" type="number" step="any" name="latitude_c17" placeholder="-0.897123" x-bind:required="adaKematianC17 === 'ya'" class="w-full rounded-r-lg border-0 p-3 text-xs focus:ring-2 focus:ring-forest-600"></label>
+                            </div>
+                        </fieldset>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c17" rows="4" placeholder="Masukkan informasi lainnya" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-600"></textarea></div>
+                    </div>
+                </div>
+
                 <div x-cloak x-show="selectedSubBidangKode === 'C.01'" x-transition class="space-y-6 pt-2">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Satuan Kerja: <span class="text-rose-500">*</span></label>
@@ -3334,7 +3628,7 @@
 
                 </div>
 
-                <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14'">
+                <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14' && selectedSubBidangKode !== 'C.15' && selectedSubBidangKode !== 'C.16' && selectedSubBidangKode !== 'C.17'">
                     <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan:</label>
                     <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-forest-600 outline-none text-xs font-medium"></textarea>
                 </div>
@@ -3535,6 +3829,111 @@
             window.setTimeout(() => window.c14Map.invalidateSize(), 100);
         };
 
+        window.initC15Map = function() {
+            const mapElement = document.getElementById('map-c15');
+            if (!mapElement || !window.L) return;
+
+            if (window.c15Map) {
+                window.c15Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c15');
+            const longitudeInput = document.getElementById('longitude-c15');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c15Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c15Map);
+
+            let marker = null;
+            window.c15Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c15Map);
+            });
+
+            window.setTimeout(() => window.c15Map.invalidateSize(), 100);
+        };
+
+        window.initC16Map = function() {
+            const mapElement = document.getElementById('map-c16');
+            if (!mapElement || !window.L) return;
+
+            if (window.c16Map) {
+                window.c16Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c16');
+            const longitudeInput = document.getElementById('longitude-c16');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c16Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c16Map);
+
+            let marker = null;
+            window.c16Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c16Map);
+            });
+
+            window.setTimeout(() => window.c16Map.invalidateSize(), 100);
+        };
+
+        window.initC17Map = function() {
+            const mapElement = document.getElementById('map-c17');
+            if (!mapElement || !window.L) return;
+
+            if (window.c17Map) {
+                window.c17Map.invalidateSize();
+                return;
+            }
+
+            const latitudeInput = document.getElementById('latitude-c17');
+            const longitudeInput = document.getElementById('longitude-c17');
+            const parsedLatitude = Number(latitudeInput.value);
+            const parsedLongitude = Number(longitudeInput.value);
+            const initialLatitude = Number.isFinite(parsedLatitude) && latitudeInput.value !== '' ? parsedLatitude : -0.9;
+            const initialLongitude = Number.isFinite(parsedLongitude) && longitudeInput.value !== '' ? parsedLongitude : 119.87;
+            window.c17Map = L.map(mapElement).setView([initialLatitude, initialLongitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19,
+            }).addTo(window.c17Map);
+
+            let marker = null;
+            window.c17Map.on('click', event => {
+                const { lat, lng } = event.latlng;
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                latitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                longitudeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                if (marker) marker.setLatLng(event.latlng);
+                else marker = L.marker(event.latlng).addTo(window.c17Map);
+            });
+
+            window.setTimeout(() => window.c17Map.invalidateSize(), 100);
+        };
+
         const conservationForm = document.querySelector('form');
         const disabledBeforePanelHidden = new WeakMap();
 
@@ -3574,7 +3973,7 @@
             let bidangId = this.value;
             let subSelect = document.getElementById('sub_bidang_select');
             
-            let alpineComponent = Alpine.$data(document.querySelector('[x-data]'));
+            let alpineComponent = window.Alpine?.$data(document.querySelector('[x-data]'));
             if (alpineComponent) {
                 alpineComponent.selectedSubBidangKode = '';
             }
@@ -3582,7 +3981,7 @@
             subSelect.disabled = true;
 
             if (bidangId) {
-                fetch('/get-sub-bidang/' + bidangId)
+                fetch('{{ url('/get-sub-bidang') }}/' + encodeURIComponent(bidangId))
                     .then(response => response.json())
                     .then(data => {
                         subSelect.innerHTML = '<option value="">-- Pilih Sub-Bidang Kategori --</option>';
@@ -3608,7 +4007,7 @@
             let kodeSub = selectedOption.getAttribute('data-kode') || '';
             const normalizedKodeSub = kodeSub.trim().toUpperCase();
 
-            let alpineComponent = Alpine.$data(document.querySelector('[x-data]'));
+            let alpineComponent = window.Alpine?.$data(document.querySelector('[x-data]'));
             if (alpineComponent) {
                 alpineComponent.selectedSubBidangKode = normalizedKodeSub;
             }
@@ -3620,7 +4019,7 @@
         const initialSubText = selectedSubOption?.textContent?.trim().toUpperCase() || '';
         const initialSubKode = selectedSubOption?.getAttribute('data-kode')?.trim().toUpperCase()
             || (initialSubText.startsWith('D.03.') ? 'D.03' : '');
-        const initialAlpineComponent = Alpine.$data(document.querySelector('[x-data]'));
+        const initialAlpineComponent = window.Alpine?.$data(document.querySelector('[x-data]'));
         if (initialAlpineComponent && initialSubKode) {
             initialAlpineComponent.selectedSubBidangKode = initialSubKode;
         }
