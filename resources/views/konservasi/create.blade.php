@@ -96,7 +96,7 @@
                 <a href="{{ route('konservasi.dashboard') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Dashboard</a>
                 <a href="{{ route('konservasi.index') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Rekapitulasi</a>
                 <a href="{{ route('konservasi.create') }}" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-forest-700 shadow-xs">Tambah Data</a>
-                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">Peta GIS</a>
+                <a href="{{ route('konservasi.peta') }}" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/50 transition">GIS</a>
             </nav>
 
             <!-- Status & User Profile -->
@@ -177,9 +177,7 @@
                  ketersediaanEkosistem: 'ya',
                  ketersediaanZonasi: 'sudah',
                  adaKegiatanB01: 'ya',
-<<<<<<< HEAD
                  adaAksesB02: 'ya',
-=======
                  adaDataLembagaC02: '',
                  bentukLembagaC02: '',
                  bentukLembagaUmumC02: ['Kebun Binatang', 'Taman Safari', 'Taman Satwa', 'Taman Satwa Khusus', 'Museum Zoologi', 'Kebun Botani', 'Taman Tumbuhan Khusus', 'Herbarium'],
@@ -207,7 +205,6 @@
                  dataTersediaD08: '',
                  adaPotensiAirD09: '',
                  dataTersediaD10D16: '',
->>>>>>> 9000433 (pesan commit)
                  palBaik: 0,
                  palRusak: 0,
                  palHilang: 0,
@@ -326,7 +323,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_parsial_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -374,7 +371,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_provinsi_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -422,7 +419,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="sk_penetapan_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -522,7 +519,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">File SK Penetapan Dokumen RPJP (pdf):</label>
-                                <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 20 Mb</p>
+                                <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                 <input type="file" name="sk_rpjp_file" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                             </div>
                         </div>
@@ -912,7 +909,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">File SK (pdf):</label>
-                                    <p class="text-[10px] text-slate-400 mb-1">Format file pdf dan maksimal 1 file berukuran 2 Mb</p>
+                                    <p class="text-[10px] text-slate-400 mb-1">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="file_sk_zonasi" accept=".pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-300 bg-white rounded-xl">
                                 </div>
                             </div>
@@ -938,8 +935,6 @@
 
                 </div>
 
-<<<<<<< HEAD
-=======
                 <!-- FORM DINAMIS SUB-BIDANG D.01: Pengunjung Kawasan Konservasi -->
                 <div x-cloak x-show="selectedSubBidangKode === 'D.01'" x-transition class="space-y-6 pt-2">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1357,7 +1352,7 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto ODTWA (JPG/PNG):</label>
-                                <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 1 Mb</p>
+                                <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 10 MB per file.</p>
                                 <input type="file" name="foto_odtwa" accept="image/png,image/jpeg" class="w-full max-w-md h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                             </div>
 
@@ -1741,7 +1736,7 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto Sarana &amp; Prasarana (JPG/PNG): <span class="text-rose-500">*</span></label>
-                                <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto dengan ukuran maksimal 1 Mb</p>
+                                <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto, masing-masing berukuran maksimal 10 MB.</p>
                                 <div class="flex flex-col md:flex-row gap-4 items-start"><input type="file" name="foto_sarana_prasarana_d07[]" accept="image/png,image/jpeg" multiple x-bind:required="adaSaranaPrasaranaD07 === 'ya'" class="w-full md:w-1/2 h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div class="grid grid-cols-3 gap-3 w-full md:w-1/2">@foreach (range(1, 3) as $photoNumber)<div class="h-28 rounded-xl border border-slate-300 bg-white flex items-start p-2 text-xs font-bold text-slate-800">{{ $photoNumber }}</div>@endforeach</div></div>
                             </div>
 
@@ -2224,7 +2219,7 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin:</label><input type="date" name="tanggal_berakhir_izin_c02" x-bind:required="adaDataLembagaC02 === 'ya' && bentukLembagaUmumC02.includes(bentukLembagaC02)" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><p class="mt-2 text-[11px] text-slate-500">Tanggal berakhir izin wajib diisi jika bentuk lembaga konservasi termasuk kategori lembaga konservasi umum</p></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c02" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2280,7 +2275,7 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c04" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2480,7 +2475,7 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang Diedarkan: <span class="text-rose-500">*</span></label><input type="text" name="spesies_diedarkan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c06" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
@@ -3052,7 +3047,6 @@
                     </div>
                 </div>
 
->>>>>>> 9000433 (pesan commit)
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG B.01: Kelompok Binaan                             -->
                 <!-- ========================================================================= -->
@@ -3354,7 +3348,6 @@
 
                 </div>
 
-<<<<<<< HEAD
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG B.02: Akses Tradisional & Kemitraan                -->
                 <!-- ========================================================================= -->
@@ -3513,7 +3506,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Kerjasama (PDF)</label>
-                                    <p class="text-[11px] text-slate-500 mb-2">Format PDF, maksimal 2 MB.</p>
+                                    <p class="text-[11px] text-slate-500 mb-2">Format PDF, maksimal 10 MB per file.</p>
                                     <input type="file" name="dokumen_kerjasama_b02" accept=".pdf,application/pdf" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs">
                                 </div>
                             </fieldset>
@@ -3528,11 +3521,6 @@
                         </fieldset>
                     </div>
                     </fieldset>
-=======
-                <div x-show="selectedSubBidangKode !== 'C.01' && selectedSubBidangKode !== 'C.02' && selectedSubBidangKode !== 'C.03' && selectedSubBidangKode !== 'C.04' && selectedSubBidangKode !== 'C.05' && selectedSubBidangKode !== 'C.06' && selectedSubBidangKode !== 'C.08' && selectedSubBidangKode !== 'C.09' && selectedSubBidangKode !== 'C.10' && selectedSubBidangKode !== 'C.11' && selectedSubBidangKode !== 'C.12' && selectedSubBidangKode !== 'C.14'">
-                    <label class="block text-xs font-bold text-slate-700 mb-2">Keterangan:</label>
-                    <textarea name="keterangan" rows="3" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-white border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-forest-600 outline-none text-xs font-medium"></textarea>
->>>>>>> 9000433 (pesan commit)
                 </div>
 
                 <!-- Action Button -->
@@ -3902,8 +3890,6 @@
                 }
             });
         }
-<<<<<<< HEAD
-
         const kabupatenB02 = document.getElementById('kabupaten_b02_select');
         const kecamatanB02 = document.getElementById('kecamatan_b02_select');
         const desaB02 = document.getElementById('desa_b02_select');
@@ -3955,10 +3941,8 @@
                 }
             });
         }
-=======
             }, 0);
         });
->>>>>>> 9000433 (pesan commit)
     </script>
 </body>
 </html>
