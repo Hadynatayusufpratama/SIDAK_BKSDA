@@ -10,6 +10,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Alpine.js untuk Form Dinamis Conditional -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>[x-cloak] { display: none !important; }</style>
     <script>
         tailwind.config = {
             theme: {
@@ -28,7 +32,7 @@
     <!-- FontAwesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-100/90 font-sans text-slate-800 antialiased min-h-screen relative">
+<body class="bg-slate-100/90 text-slate-800 antialiased min-h-screen flex flex-col relative" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
     @php
         // Array Daftar 18 Kawasan Konservasi BKSDA Sulteng
@@ -119,7 +123,7 @@
     </header>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <main class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 flex-1">
 
         <!-- HEADER BANNER & TOMBOL KEMBALI -->
         <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -176,6 +180,7 @@
                  ketersediaanEvaluasi: 'ya',
                  ketersediaanEkosistem: 'ya',
                  ketersediaanZonasi: 'sudah',
+                 adaPengesahanD03: '',
                  adaKegiatanB01: 'ya',
                  adaAksesB02: 'ya',
                  adaDataLembagaC02: '',
@@ -251,7 +256,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 1: A.01 / Kawasan Konservasi                      -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.01'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.01'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -259,10 +264,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -445,7 +449,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 2: A.02 / Perencanaan Pengelolaan Kawasan        -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.02'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.02'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -453,10 +457,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun_rpjp" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -530,7 +533,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 3: A.03 / Monitoring Batas Kawasan Konservasi      -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.03'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.03'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -538,10 +541,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun_monitoring" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -686,7 +688,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 4: A.04 / Evaluasi Kesesuaian Fungsi             -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.04'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.04'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -694,10 +696,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun_evaluasi" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -774,7 +775,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 5: A.05 / Ekosistem Kawasan                       -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.05'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.05'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -782,10 +783,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun_ekosistem" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -841,7 +841,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG 6: A.06 / Penataan Zonasi/Blok                    -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'A.06'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'A.06'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN -->
                     <div>
@@ -849,10 +849,9 @@
                             Tahun: <span class="text-rose-500">*</span>
                         </label>
                         <select name="tahun_zonasi" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @for ($year = 2026; $year >= 1945; $year--)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -1352,7 +1351,11 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto ODTWA (JPG/PNG):</label>
+<<<<<<< HEAD
                                 <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 10 MB per file.</p>
+=======
+                                <p class="text-[11px] text-slate-500 mb-2">Ukuran maksimal 1 Mb</p>
+>>>>>>> temp-fix
                                 <input type="file" name="foto_odtwa" accept="image/png,image/jpeg" class="w-full max-w-md h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                             </div>
 
@@ -1736,7 +1739,11 @@
 
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">Foto Sarana &amp; Prasarana (JPG/PNG): <span class="text-rose-500">*</span></label>
+<<<<<<< HEAD
                                 <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto, masing-masing berukuran maksimal 10 MB.</p>
+=======
+                                <p class="text-[11px] text-slate-500 mb-2">Maksimal 3 foto dengan ukuran maksimal 1 Mb</p>
+>>>>>>> temp-fix
                                 <div class="flex flex-col md:flex-row gap-4 items-start"><input type="file" name="foto_sarana_prasarana_d07[]" accept="image/png,image/jpeg" multiple x-bind:required="adaSaranaPrasaranaD07 === 'ya'" class="w-full md:w-1/2 h-12 rounded-xl border border-slate-300 bg-slate-50 text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div class="grid grid-cols-3 gap-3 w-full md:w-1/2">@foreach (range(1, 3) as $photoNumber)<div class="h-28 rounded-xl border border-slate-300 bg-white flex items-start p-2 text-xs font-bold text-slate-800">{{ $photoNumber }}</div>@endforeach</div></div>
                             </div>
 
@@ -2219,7 +2226,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c02" x-bind:required="adaDataLembagaC02 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin:</label><input type="date" name="tanggal_berakhir_izin_c02" x-bind:required="adaDataLembagaC02 === 'ya' && bentukLembagaUmumC02.includes(bentukLembagaC02)" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"><p class="mt-2 text-[11px] text-slate-500">Tanggal berakhir izin wajib diisi jika bentuk lembaga konservasi termasuk kategori lembaga konservasi umum</p></div>
                         </div>
+<<<<<<< HEAD
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c02" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c02" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2275,7 +2286,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c04" x-bind:required="adaDataPenangkaranC04 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
+<<<<<<< HEAD
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c04" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c04" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
                 </div>
@@ -2475,7 +2490,11 @@
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Perizinan: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_perizinan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                             <div><label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Berakhir Izin: <span class="text-rose-500">*</span></label><input type="date" name="tanggal_berakhir_izin_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         </div>
+<<<<<<< HEAD
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format PDF, maksimal 10 MB per file.</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+=======
+                        <div><label class="block text-xs font-bold text-slate-700 mb-1">Dokumen Perizinan (pdf):</label><p class="mb-2 text-[11px] text-slate-500">Format file pdf dan maksimal 1 file berukuran 2 Mb</p><input type="file" name="dokumen_perizinan_c06" accept=".pdf,application/pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 border border-slate-300 bg-white rounded-xl"></div>
+>>>>>>> temp-fix
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Spesies yang Diedarkan: <span class="text-rose-500">*</span></label><input type="text" name="spesies_diedarkan_c06" x-bind:required="adaDataPengedarC06 === 'ya'" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-700 mb-1">Keterangan:</label><textarea name="keterangan_c06" rows="4" placeholder="Masukan disini untuk informasi lainnya" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none"></textarea></div>
                     </div>
@@ -3050,7 +3069,7 @@
                 <!-- ========================================================================= -->
                 <!-- FORM DINAMIS SUB-BIDANG B.01: Kelompok Binaan                             -->
                 <!-- ========================================================================= -->
-                <div x-show="selectedSubBidangKode === 'B.01'" x-transition class="space-y-6 pt-2">
+                <div x-cloak x-show="selectedSubBidangKode === 'B.01'" x-transition class="space-y-6 pt-2">
                     
                     <!-- 1. TAHUN & PERIODE SEMESTER -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3059,10 +3078,9 @@
                                 Tahun: <span class="text-rose-500">*</span>
                             </label>
                             <select name="tahun_b01" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:bg-white focus:outline-none">
-                                <option value="2026">2026</option>
-                                <option value="2025">2025</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
+                                @for ($year = 2026; $year >= 1945; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
                             </select>
                         </div>
                         <div>
@@ -3759,7 +3777,6 @@
             if (alpineComponent) {
                 alpineComponent.selectedSubBidangKode = '';
             }
-
             subSelect.innerHTML = '<option value="">Memuat sub-bidang...</option>';
             subSelect.disabled = true;
 
@@ -3789,12 +3806,24 @@
         document.getElementById('sub_bidang_select').addEventListener('change', function() {
             let selectedOption = this.options[this.selectedIndex];
             let kodeSub = selectedOption.getAttribute('data-kode') || '';
-            
+            const normalizedKodeSub = kodeSub.trim().toUpperCase();
+
             let alpineComponent = Alpine.$data(document.querySelector('[x-data]'));
             if (alpineComponent) {
-                alpineComponent.selectedSubBidangKode = kodeSub.trim().toUpperCase();
+                alpineComponent.selectedSubBidangKode = normalizedKodeSub;
             }
         });
+
+        // Sinkronkan pilihan sub-bidang yang sudah terpilih saat halaman dibuka.
+        const selectedSubBidang = document.getElementById('sub_bidang_select');
+        const selectedSubOption = selectedSubBidang.options[selectedSubBidang.selectedIndex];
+        const initialSubText = selectedSubOption?.textContent?.trim().toUpperCase() || '';
+        const initialSubKode = selectedSubOption?.getAttribute('data-kode')?.trim().toUpperCase()
+            || (initialSubText.startsWith('D.03.') ? 'D.03' : '');
+        const initialAlpineComponent = Alpine.$data(document.querySelector('[x-data]'));
+        if (initialAlpineComponent && initialSubKode) {
+            initialAlpineComponent.selectedSubBidangKode = initialSubKode;
+        }
 
         // --- 2. SCRIPT FOR DROPDOWN WILAYAH INDONESIA (BERTINGKAT) ---
         const provSelect = document.getElementById('provinsi_select');

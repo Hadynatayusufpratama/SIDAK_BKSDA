@@ -51,13 +51,21 @@ class KonservasiStoreTest extends TestCase
             ->from(route('konservasi.create'))
             ->post(route('konservasi.store'), [
                 'sub_bidang_id' => $subBidang->id,
+<<<<<<< HEAD
                 'sk_parsial_file' => UploadedFile::fake()->create('sk-parsial.pdf', 11000, 'application/pdf'),
+=======
+                'sk_parsial_file' => UploadedFile::fake()->create('sk-parsial.pdf', 2500, 'application/pdf'),
+>>>>>>> temp-fix
             ])
             ->assertRedirect(route('konservasi.create'));
 
         $this->get(route('konservasi.create'))
             ->assertOk()
+<<<<<<< HEAD
             ->assertSee('Ukuran File SK parsial maksimal 10 MB per file.');
+=======
+            ->assertSee('Ukuran file SK parsial maksimal 2 MB.');
+>>>>>>> temp-fix
 
         $this->assertDatabaseCount('data_konservasi', 0);
     }

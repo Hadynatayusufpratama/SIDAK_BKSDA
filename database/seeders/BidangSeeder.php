@@ -5,17 +5,20 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Bidang;
 use App\Models\SubBidang;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class BidangSeeder extends Seeder
 {
     public function run(): void
     {
-        // Matikan foreign key check sementara agar pembersihan data aman
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Matikan foreign key check (Aman untuk SQLite & MySQL)
+        Schema::disableForeignKeyConstraints();
+
         Bidang::truncate();
         SubBidang::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Hidupkan kembali foreign key check
+        Schema::enableForeignKeyConstraints();
 
         $data = [
             // Gambar 1: Perencanaan Konservasi (Kode A)
@@ -53,9 +56,8 @@ class BidangSeeder extends Seeder
             // Gambar 3: Konservasi Spesies dan Genetik (Kode C)
             [
                 'bidang' => 'Konservasi Spesies dan Genetik',
-                'subs' => [
-                    ['C.01', 'Perjumpaan Spesies di dalam dan luar Kawasan Konservasi'],
-                    ['C.02', 'Lembaga Konservasi Umum dan Khusus'],
+                    SubBidang::query()->delete();
+                    Bidang::query()->delete();
                     ['C.03', 'Koleksi TSL di Lembaga Konservasi'],
                     ['C.04', 'Penangkaran Tumbuhan dan Satwa Liar'],
                     ['C.05', 'Jenis TSL yang ditangkarkan di Penangkaran'],
